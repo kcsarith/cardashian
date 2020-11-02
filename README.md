@@ -25,7 +25,6 @@ There will be a cards model with
 * React
 * Flask
 * SQLAlchemy
-* Material UI
 * Beautiful React Drag and Drop
 
 ## Bonus
