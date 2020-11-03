@@ -1,5 +1,5 @@
 Here's an idea of what I want to create for my capstone.
-# Cardian
+# Cardashian
 The final solo project.
 
 # Why would I need this?
