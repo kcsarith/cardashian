@@ -1,5 +1,5 @@
-Here's an idea of what I want to create for my capstone.
 # Cardashian
+Here's an idea of what I want to create for my capstone.
 The final solo project.
 
 # Why would anyone need this?
