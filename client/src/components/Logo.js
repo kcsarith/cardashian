@@ -1,7 +1,5 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import FastfoodIcon from '@material-ui/icons/Fastfood';
-
 const Logo = () => {
     return (
         <NavLink
@@ -18,7 +16,6 @@ const Logo = () => {
                 lineHeight: "50px",
             }}
         >
-            <FastfoodIcon />
         </NavLink>
     );
 };

@@ -76,16 +76,16 @@ export const error = (message) => {
 }
 
 export const setPoints = (points) => {
-    return { type: SET_POINTS, points}
+    return { type: SET_POINTS, points }
 }
 
-export const signup = (name, email, password, city, state, points) => {
+export const signup = (name, email, password, city, country, promotion_points) => {
     return async (dispatch, getState) => {
         const fetchWithCSRF = getState().authentication.csrf;
         const res = await fetchWithCSRF('/api/session/signup', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password, city, state, points })
+            body: JSON.stringify({ name, email, password, city, country, promotion_points })
         })
 
         if (res.status === 400) {
@@ -141,7 +141,7 @@ export default function reducer(state = initialState, action) {
         case ERROR_MSG:
             return { ...state, error: action.message }
         case SET_POINTS:
-            return { ...state, points: action.points}
+            return { ...state, points: action.points }
         default:
             return state
     }
