@@ -8,7 +8,7 @@ import { useLocation, Switch, Route } from 'react-router-dom';
 import Homepage from './views/Homepage';
 import Login from './views/Login'
 import EditCardLayout from './components/EditCardLayout';
-import EditCard from './views/EditCard';
+import FooterContents from './components/FooterContents';
 
 import { UserContext } from './Context';
 
@@ -110,31 +110,29 @@ function App() {
 
     return (
         <UserContext.Provider value={providerUserInfo}>
-            <EditCardLayout>
-                <Switch>
-                    <Route path="/login" component={Login} />
-                    {/* <PrivateRoute
+            <Switch>
+                <Route path="/login" component={Login} />
+                {/* <PrivateRoute
                     path="/profile"
                     exact={true}
                     component={LoginPanel}
                 /> */}
-                    {/* <Route
+                {/* <Route
                     path="/signup"
                     exact={true}
                     component={SignUp}
                 /> */}
-                    <Route
-                        path="/cards/edit"
-                        exact={true}
-                        component={EditCard}
-                    />
-                    <Route
-                        path="/"
-                        exact={true}
-                        component={Homepage}
-                    />
-                </Switch>
-            </EditCardLayout>
+                <Route
+                    path="/cards"
+                    component={EditCardLayout}
+                />
+                <Route
+                    path="/"
+                    exact={true}
+                    component={Homepage}
+                />
+            </Switch>
+            <FooterContents />
         </UserContext.Provider>
     );
 }

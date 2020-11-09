@@ -5,7 +5,7 @@ COPY . .
 
 # Install Python Dependencies
 
-RUN ["pip", "install", "boto3"]
+# RUN ["pip", "install", "boto3"]
 RUN ["pip", "install", "-r", "requirements.txt"]
 RUN ["pip", "install", "psycopg2"]
 

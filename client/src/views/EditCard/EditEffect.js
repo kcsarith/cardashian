@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Row, Col, Form, Select, Input, InputNumber } from 'antd'
 import { playerTargetOptions, playerConditionOptions, characterTargetOptions, characterConditionOptions, operatorOptions, effectOptions, effectTargetOptions } from '../../cardData';
 
+import CardEffectsList from './CardEffectsList'
 import { UserContext } from '../../Context';
 const selectWidth = 200
 const EditEffect = (props) => {
@@ -112,8 +113,7 @@ const EditEffect = (props) => {
                     <InputNumber min={0} defaultValue={0} onChange={handleEffectTurnChange} disabled={!editCardState.effect || !editCardState.effectTarget} />
                 </Form.Item>
             </Input.Group>
-
-
+            <CardEffectsList />
             {(editCardState.playerTarget && editCardState.playerCondition && editCardState.playerOperator) && <p>{editCardState.playerTarget} {editCardState.playerCondition} {editCardState.playerOperator} {editCardState.playerValue} </p>}
             {(editCardState.characterTarget && editCardState.characterCondition && editCardState.characterOperator) && <p>{editCardState.characterTarget} {editCardState.characterCondition} {editCardState.characterOperator} {editCardState.characterValue} </p>}
             {(editCardState.effectTarget && editCardState.effect) && <p>{editCardState.effectTarget} {editCardState.effect} {editCardState.effectValue} for the next {editCardState.turn} turn(s)</p>}

@@ -8,7 +8,7 @@ const CardImageWithSaveCancel = (props) => {
             <Button type="primary" block icon={<DownloadOutlined />} >Cancel</Button>
             <Image
                 width='100%'
-                src="https://cdn.donmai.us/sample/0f/07/__suou_patra_honey_strap_drawn_by_kusumoto_shizuru__sample-0f07c9304df386b81c0c6d59446ce352.jpg"
+                src="https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/poker-playing-card-ace-club-miroslav-nemecek.jpg"
             />
             <Descriptions title="Card Info" bordered>
                 <Descriptions.Item span={3} label="Product">Cloud Database</Descriptions.Item>
