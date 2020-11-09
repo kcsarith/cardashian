@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from cardashian_app.models import CardFavorite,Deck,CharacterCategory,CardImage,CardEffect,CardComment,Card,Game,UserTag,CardTag,GameTag,User
+from cardashian_app.models import User
 from cardashian_app import app, db, sess
 from cardashian_app.extensions import guard
 from datetime import date
