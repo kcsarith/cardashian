@@ -1,29 +1,31 @@
 import os
+
 from flask import Flask, render_template, request, session
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect, generate_csrf
-
+from flask_session import Session
 
 from cardashian_app.models import db, User
 from cardashian_app.api.user_routes import user_routes
 from cardashian_app.api import session, home
 from cardashian_app.config import Config
 from flask_login import LoginManager
+from .extensions import guard
 
 app = Flask(__name__)
-
 app.config.from_object(Config)
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(session.bp, url_prefix='/api/session')
 app.register_blueprint(home.bp, url_prefix='/api/home')
-db.init_app(app)
 
+db.init_app(app)
+sess = Session(app)
+guard.init_app(app, User)
 
 # Application Security
 
 CORS(app)
-# CSRFProtect(app)
-
+CSRFProtect(app)
 
 @app.after_request
 def inject_csrf_token(response):

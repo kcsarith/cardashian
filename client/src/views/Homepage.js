@@ -1,38 +1,34 @@
-import React from 'react';
-import { FormControl, InputLabel, NativeSelect, Container } from '@material-ui/core';
+import React, { useContext } from 'react';
+import { Form, Input, Button, Checkbox } from 'antd';
 
-const Homepage = () => {
-    const [state, setState] = React.useState({
-        age: '',
-        name: 'hai',
-    });
+import { UserContext } from '../Context';
+const layout = {
+    labelCol: {
+        span: 8,
+    },
+    wrapperCol: {
+        span: 16,
+    },
+};
+const tailLayout = {
+    wrapperCol: {
+        offset: 8,
+        span: 16,
+    },
+};
 
-    const handleChange = (event) => {
-        const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value,
-        });
+const Demo = () => {
+    const userContext = useContext(UserContext);
+    console.log(userContext);
+    const onFinish = (values) => {
+        console.log('Success:', values);
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
     };
     return (
-        <Container>
-            <FormControl >
-                <InputLabel shrink htmlFor="age-native-label-placeholder"> Age</InputLabel>
-                <NativeSelect
-                    value={state.age}
-                    onChange={handleChange}
-                    inputProps={{
-                        name: 'age',
-                        id: 'age-native-label-placeholder',
-                    }}
-                >
-                    <option value="">None</option>
-                    <option value={10}>Ten</option>
-                    <option value={20}>Twenty</option>
-                    <option value={30}>Thirty</option>
-                </NativeSelect>
-            </FormControl>
-        </Container>
+        <>HOMEPAGE
+        </>
     );
-}
-export default Homepage
+};
+export default Demo;

@@ -1,57 +1,109 @@
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
-db = SQLAlchemy()
 
+from .extensions import db, guard
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    roles = db.Column(db.Text, default='Member', nullable=False)
     is_public = db.Column(db.Boolean, default=True, nullable=False)
     # featured_game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=True)
     promotion_points = db.Column(db.Integer, default=1000, nullable=False)
     online_status = db.Column(db.String(15), default='Online', nullable=False)
     alias = db.Column(db.String(15), default='No Alias', nullable=False)
-    name = db.Column(db.String(15), default='No Name', nullable=False)
+    username = db.Column(db.String(15), default='No Name', nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
-    country = db.Column(db.String(127), nullable=False)
-    city = db.Column(db.String(127), nullable=False)
+    country = db.Column(db.String(127),default='United States', nullable=False)
+    city = db.Column(db.String(127), default='San Francisco', nullable=False)
     about_me = db.Column(db.Text, default='I just joined and need to update my profile later.')
     profile_pic_src = db.Column(db.String(255), default=None)
     background_src = db.Column(db.String(255), default=None)
-    hashed_password = db.Column(db.String(100), nullable=False)
+    hashed_password = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    is_active = db.Column(db.Boolean, default=True, server_default="true")
 
+    @property
+    def rolenames(self):
+        try:
+            return self.roles.split(',')
+        except Exception:
+            return []
 
-    # Relationships
-    # favorites = db.relationship('CardFavorite', backref='owner', lazy=True)
-    # reservations = db.relationship('Reservation', backref='user', lazy=True)
-    # reviews = db.relationship('Review', backref='user', lazy=True)
-    # restaurants = db.relationship('Restaurant', secondary=favorites)
+    @classmethod
+    def lookup(cls, username):
+        return User.query.filter_by(username=username).one_or_none()
+
+    @property
+    def identity(self):
+        return self.id
+
+    @classmethod
+    def identify(cls, id):
+        return User.query.filter_by(id=id).one_or_none()
 
     @property
     def password(self):
         return self.hashed_password
 
-    @password.setter
-    def password(self, password):
-        self.hashed_password = generate_password_hash(password)
+    def is_valid(self):
+        return self.is_active
 
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
+    # Relationships
+
+    # @property
+    # def password(self):
+    #     return self.hashed_password
+
+    # @password.setter
+    # def password(self, password):
+    #     self.hashed_password = generate_password_hash(password)
+
+    # def check_password(self, password):
+    #     return check_password_hash(self.password, password)
 
     def to_dict(self):
         return {
           "id": self.id,
-          "name": self.name,
+          "roles": self.roles,
+          "is_public": self.is_public,
+          "promotion_points": self.promotion_points,
+          "online_status": self.online_status,
+          "alias": self.alias,
+          "username": self.username,
           "email": self.email,
-          "city": self.city,
           "country": self.country,
+          "city": self.city,
+          "about_me": self.about_me,
+          "profile_pic_src": self.profile_pic_src,
+          "background_src": self.background_src,
+        #   "hashed_password": self.hashed_password,
+          "created_at": self.created_at,
+          "updated_at": self.updated_at,
+          "is_active": self.is_active
+        }
+    def to_dict_show_hashed(self):
+        return {
+          "id": self.id,
+          "roles": self.roles,
+          "is_public": self.is_public,
+          "promotion_points": self.promotion_points,
+          "online_status": self.online_status,
+          "alias": self.alias,
+          "username": self.username,
+          "email": self.email,
+          "country": self.country,
+          "city": self.city,
+          "about_me": self.about_me,
+          "profile_pic_src": self.profile_pic_src,
+          "background_src": self.background_src,
           "hashed_password": self.hashed_password,
-          "promotion_points": self.promotion_points
+          "created_at": self.created_at,
+          "updated_at": self.updated_at,
+          "is_active": self.is_active
         }
 
 

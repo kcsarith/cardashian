@@ -24,6 +24,8 @@ WTForms = "==2.3.3"
 Flask-JWT-Extended = "==3.24.1"
 Flask-Login = "==0.5.0"
 pyjwt = "==1.7.1"
+flask-praetorian = "*"
+flask-session = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,51 +1,69 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from flask_login import current_user, login_user, logout_user, login_required
 from cardashian_app.models import User, db
-
+from ..extensions import guard
+import flask_praetorian
+# from flask_praetorian import auth_required
 
 bp = Blueprint("session", __name__)
 
+@bp.route('/token-verify')
+def verify_token():
+    get_user_from_registration_token()
 
-@bp.route("/login", methods=["GET", "POST"])
+@bp.route('/login', methods=['post'])
 def login():
-    if not request.is_json:
-        return jsonify({"msg": "Missing JSON in request"}), 400
-    user_email = request.json.get("email", None)
-    user_password = request.json.get("password", None)
-    if not user_email or not user_password:
-        return {"errors": ["Missing required credentials"]}, 400
-    user = User.query.filter(User.email == user_email).first()
-    if not user or not user.check_password(user_password):
-        return {"errors": ["Invalid user credentials"]}, 401
-    login_user(user)
-    return {"user": current_user.to_dict()}
+    json_data = request.get_json()
+    username = json_data['username']
+    password = json_data['password']
+    user = guard.authenticate(username, password)
+
+    return jsonify({'access_token': guard.encode_jwt_token(user), 'user': user.to_dict()},200)
+
+@bp.route('/refresh')
+def refresh():
+    json.data = request.get_json()
+    return jsonify({'access_token': guard.encode_jwt_token(user)},200)
 
 
-@login_required
-@bp.route('/logout', methods=["POST"])
-def logout():
-    logout_user()
-    return {'msg': "you've been logged out"}, 200
+@bp.route('/protected')
+@flask_praetorian.auth_required
+def protected():
+    return jsonify(
+        message="protected endpoint (roles: {})".format(flask_praetorian.current_user().roles))
 
+@bp.route('/protected/member')
+@flask_praetorian.roles_required('Member')
+def protected_admin():
+    return jsonify(message='You are a member!')
 
-@bp.route("/signup", methods=["GET", "POST"])
-def signup():
-    if not request.is_json:
-        return jsonify({"msg": "Missing JSON in request"}), 400
-    email = request.json.get("email", None)
-    user = User.query.filter(User.email == email).first()
-    if user:
-        return jsonify({"errors":
-                       "The email you've entered has been already registered"}
-                       ), 400
-    name = request.json.get("name", None)
-    password = request.json.get("password", None)
-    city = request.json.get("city", None)
-    country = request.json.get("country", None)
-    points = request.json.get("points", None)
-    newUser = User(name=name, email=email, password=password,
-                   city=city, country=country, points=points)
-    db.session.add(newUser)
+@bp.route('/register', methods=['post'])
+def register():
+    json_data = request.get_json()
+    username = json_data['username']
+    email = json_data['email']
+    password = json_data['password']
+
+    new_user = User(
+        username= username,
+        email= email,
+        hashed_password= guard.hash_password(password)
+    )
+    db.session.add(new_user)
     db.session.commit()
-    login_user(newUser)
-    return {"user": newUser.to_dict()}
+
+    user = guard.authenticate(username, password)
+    return jsonify({'message': 'sucessfully registred a new user!','access_token': guard.encode_jwt_token(user)},200)
+    # ret = {'message': 'successfully sent registration email to user {}'.format(
+    #     new_user.username
+    # )}
+    # return (jsonify(ret), 201)
+
+@bp.route('/finalize')
+def finalize():
+    registration_token = guard.read_token_from_header()
+    user = guard.get_user_from_registration_token(registration_token)
+    user.is_active = True
+    db.session.commit()
+
+    return jsonify({'access_token': guard.encode_jwt_token(user)},200)
