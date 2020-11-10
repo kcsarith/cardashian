@@ -61,38 +61,9 @@ const CardAndOwnerName = () => {
         },
     ];
 
-    const IconLink = ({ src, text }) => (
-        <a className="example-link">
-            <img className="example-link-icon" src={src} alt={text} />
-            {text}
-        </a>
-    );
-
     const content = (
         <>
-            <Paragraph>
-                Ant Design interprets the color system into two levels: a system-level color system and a
-                product-level color system.
-    </Paragraph>
-            <Paragraph>
-                Ant Design&#x27;s design team preferred to design with the HSB color model, which makes it
-                easier for designers to have a clear psychological expectation of color when adjusting colors,
-                as well as facilitate communication in teams.
-    </Paragraph>
-            <div>
-                <IconLink
-                    src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
-                    text="Quick Start"
-                />
-                <IconLink
-                    src="https://gw.alipayobjects.com/zos/rmsportal/NbuDUAuBlIApFuDvWiND.svg"
-                    text=" Product Info"
-                />
-                <IconLink
-                    src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg"
-                    text="Product Doc"
-                />
-            </div>
+            <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque feugiat lorem ligula, nec accumsan tortor venenatis vel. Etiam tristique ex eget ultricies lobortis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Praesent tristique porta lacus, sed volutpat nisl commodo dictum. Fusce non felis in magna suscipit laoreet id et diam. In hac habitasse platea dictumst. Sed egestas et arcu non laoreet. Nullam id quam nunc. Mauris aliquet, nisi ut placerat rhoncus, lorem enim elementum elit, ut placerat tellus mi sit amet nisl. In vel pharetra nisi.</Paragraph>
         </>
     );
 
@@ -100,7 +71,7 @@ const CardAndOwnerName = () => {
         return (
             <Row>
                 <div style={{ flex: 1 }}>{children}</div>
-                <div className="image">{extraContent}</div>
+                <div>{extraContent}</div>
             </Row>
         );
     };
@@ -110,27 +81,11 @@ const CardAndOwnerName = () => {
             title="Title"
             className="site-page-header"
             subTitle="This is a subtitle"
-            tags={<Tag color="blue">Running</Tag>}
-            extra={[
-                <Button key="3">Operation</Button>,
-                <Button key="2">Operation</Button>,
-                <Button key="1" type="primary">
-                    Primary
-      </Button>,
-                <DropdownMenu key="more" />,
-            ]}
-            avatar={{ src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4' }}
+            tags={<Tag color="blue">Public</Tag>}
+            avatar={{ src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS87xycN9qAVAjPd-vseckDvNMSmgjT_LKBRw&usqp=CAU' }}
             breadcrumb={{ routes }}
         >
-            <Content
-                extraContent={
-                    <img
-                        src="https://gw.alipayobjects.com/zos/antfincdn/K%24NnlsB%26hz/pageHeader.svg"
-                        alt="content"
-                        width="100%"
-                    />
-                }
-            >
+            <Content>
                 {content}
             </Content>
         </PageHeader>

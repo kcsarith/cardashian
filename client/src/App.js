@@ -1,14 +1,15 @@
 import './App.less';
+import "react-image-gallery/styles/css/image-gallery.css";
 import 'antd/dist/antd.css';
 
 import Cookies from 'js-cookie'
 import React, { useMemo, useState, useEffect } from 'react';
 import { useLocation, Switch, Route } from 'react-router-dom';
 
-import Homepage from './views/Homepage';
+import NavAndFooter from './views/NavAndFooter';
 import Login from './views/Login'
+import Homepage from './views/Homepage'
 import EditCardLayout from './components/EditCardLayout';
-import FooterContents from './components/FooterContents';
 
 import { UserContext } from './Context';
 
@@ -110,29 +111,30 @@ function App() {
 
     return (
         <UserContext.Provider value={providerUserInfo}>
-            <Switch>
-                <Route path="/login" component={Login} />
-                {/* <PrivateRoute
+            <NavAndFooter>
+                <Switch>
+                    <Route path="/login" component={Login} />
+                    {/* <PrivateRoute
                     path="/profile"
                     exact={true}
                     component={LoginPanel}
                 /> */}
-                {/* <Route
+                    {/* <Route
                     path="/signup"
                     exact={true}
                     component={SignUp}
                 /> */}
-                <Route
-                    path="/cards"
-                    component={EditCardLayout}
-                />
-                <Route
-                    path="/"
-                    exact={true}
-                    component={Homepage}
-                />
-            </Switch>
-            <FooterContents />
+                    <Route
+                        path="/cards"
+                        component={EditCardLayout}
+                    />
+                    <Route
+                        path="/"
+                        exact={true}
+                        component={Homepage}
+                    />
+                </Switch>
+            </NavAndFooter >
         </UserContext.Provider>
     );
 }

@@ -3,7 +3,6 @@ import Footer from 'rc-footer';
 import 'rc-footer/assets/index.css'; // import 'rc-footer/asssets/index.less';
 
 export default function FooterContents() {
-
     return (
         <Footer
             // maxColumnsPerRow={4}
