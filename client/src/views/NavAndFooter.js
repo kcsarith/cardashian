@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Layout, Menu, Avatar, Typography, Button } from 'antd';
+import { Layout, Menu, Avatar, Typography, Image } from 'antd';
 import { UserContext } from '../Context';
 import FooterContents from '../components/FooterContents'
 import LoginModal from '../components/LoginModal'
+import HomepageSider from '../components/HomepageSider';
 const { Header, Content } = Layout;
 
 const { Title } = Typography;
@@ -23,7 +24,12 @@ const NavAndFooter = (props) => {
                         <LoginModal />}
                 </Header>
                 <Content style={{ margin: 'auto' }}>
+                    {/* <Layout>
+                        <HomepageSider />
+                        <Content> */}
                     {props.children}
+                    {/* </Content>
+                    </Layout> */}
                 </Content>
             </Layout>
             <FooterContents />
