@@ -16,7 +16,6 @@ const EditCardLayout = (props) => {
     const { SubMenu } = Menu;
     const { Title } = Typography;
     const { Header, Content, Sider } = Layout;
-    console.log(webLocation.pathname === '/cards/edit')
     return (
         <Layout>
             <Sider>
@@ -75,7 +74,6 @@ const EditCardLayout = (props) => {
                     </Breadcrumb>
                     <div style={{ background: '#fff', padding: 24, minHeight: 580 }}>
                         {webLocation.pathname.includes('/cards/edit') && <EditCard />}
-                        {/* <EditCard /> */}
                         {props.children}
                     </div>
                 </Content>

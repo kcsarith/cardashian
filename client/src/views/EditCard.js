@@ -2,9 +2,9 @@ import React from 'react';
 import { Row, Col } from 'antd';
 // import { Container, Grid, } from '@material-ui/core';
 
-import CardImageWithSaveCancel from './EditCard/CardImageWithSaveCancel'
-import CardAndOwnerName from './EditCard/CardAndOwnerName';
-import EditEffect from './EditCard/EditEffect';
+import CardImageWithSaveCancel from './EditCardEffect/CardImageWithSaveCancel'
+import CardAndOwnerName from './EditCardEffect/CardAndOwnerName';
+import EditEffect from './EditCardEffect/EditEffect';
 
 const EditCard = () => {
     return (
@@ -12,7 +12,7 @@ const EditCard = () => {
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                 <Col span={18}>
                     <CardAndOwnerName />
-                    <EditEffect />
+                    {/* <EditEffect /> */}
                 </Col>
                 <Col span={6}>
                     <CardImageWithSaveCancel />

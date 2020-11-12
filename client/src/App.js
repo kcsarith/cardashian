@@ -7,8 +7,12 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useLocation, Switch, Route } from 'react-router-dom';
 
 import NavAndFooter from './views/NavAndFooter';
-import Login from './views/Login'
-import Homepage from './views/Homepage'
+import Login from './views/Login';
+import Homepage from './views/Homepage';
+import GamesPage from './views/GamesPage.js';
+import CardsPage from './views/CardsPage';
+import UserPage from './views/UserPage';
+import Settings from './views/Settings';
 import EditCardLayout from './components/EditCardLayout';
 
 import { UserContext } from './Context';
@@ -113,7 +117,7 @@ function App() {
         <UserContext.Provider value={providerUserInfo}>
             <NavAndFooter>
                 <Switch>
-                    <Route path="/login" component={Login} />
+                    <Route path="/users/login" component={Login} />
                     {/* <PrivateRoute
                     path="/profile"
                     exact={true}
@@ -125,13 +129,59 @@ function App() {
                     component={SignUp}
                 /> */}
                     <Route
-                        path="/cards"
-                        component={EditCardLayout}
-                    />
-                    <Route
                         path="/"
                         exact={true}
                         component={Homepage}
+                    />
+                    <Route
+                        path="/games"
+                        exact={true}
+                        component={GamesPage}
+                    />
+                    <Route
+                        path="/cards"
+                        exact={true}
+                        component={CardsPage}
+                    />
+                    <Route
+                        path="/card-edit"
+                        component={EditCardLayout}
+                    />
+                    <Route
+                        path="/card-edit/:cardId"
+                        component={EditCardLayout}
+                    />
+                    <Route
+                        path="/card-edit/:cardId/visuals"
+                        component={EditCardLayout}
+                    />
+                    <Route
+                        path="/card-edit/:cardId/stats"
+                        component={EditCardLayout}
+                    />
+                    <Route
+                        path="/card-edit/:cardId/effects"
+                        component={EditCardLayout}
+                    />
+                    <Route
+                        path="/settings"
+                        exact={true}
+                        component={Settings}
+                    />
+                    <Route
+                        path="/:username"
+                        exact={true}
+                        component={UserPage}
+                    />
+                    <Route
+                        path="/:username/:gamename"
+                        exact={true}
+                        component={UserPage}
+                    />
+                    <Route
+                        path="/:username/:gamename/:cardname"
+                        exact={true}
+                        component={UserPage}
                     />
                 </Switch>
             </NavAndFooter >

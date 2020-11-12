@@ -6,7 +6,6 @@ const { Panel } = Collapse;
 const { Option } = Select;
 
 function callback(key) {
-    console.log(key);
 }
 
 const text = `

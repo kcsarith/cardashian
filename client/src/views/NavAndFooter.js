@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Layout, Menu, Avatar, Typography, Image } from 'antd';
 import { UserContext } from '../Context';
 import FooterContents from '../components/FooterContents'
@@ -9,21 +10,43 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 const NavAndFooter = (props) => {
     const { userInfo } = useContext(UserContext);
+    const history = useHistory();
+    const handleMenuClick = (e, props) => {
+        switch (e.key) {
+            case 'games':
+                history.push('/games');
+                break;
+            case 'cards':
+                history.push('/cards');
+                break;
+            case 'about':
+                history.push('/about');
+                break;
+            default:
+                history.push('/');
+        }
+    }
+
     return (
         <>
             <Layout >
                 <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '48px' }}>
-                    <a><Title style={{ color: 'white' }} level={3}>CARDASHIAN</Title></a>
-                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} >
-                        <Menu.Item key="1">Home</Menu.Item>
-                        <Menu.Item key="2">Games</Menu.Item>
-                        <Menu.Item key="3">Cards</Menu.Item>
-                        <Menu.Item key="4">About</Menu.Item>
+                    <a><Title style={{ color: 'white' }} level={3} onClick={handleMenuClick}>CARDASHIAN</Title></a>
+                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['home']} onClick={handleMenuClick}>
+                        <Menu.Item key="home">Home</Menu.Item>
+                        <Menu.Item key="games">Games</Menu.Item>
+                        <Menu.Item key="cards">Cards</Menu.Item>
+                        <Menu.Item key="about">About</Menu.Item>
                     </Menu>
-                    {userInfo.username ? <>Hello {userInfo.username}<Avatar style={{ float: 'right' }} src='https://media1.tenor.com/images/7c8816ed2a438626a4b595a19b37e265/tenor.gif?itemid=15172307' /></> :
-                        <LoginModal />}
+                    {userInfo.username ? <>Hello {userInfo.username}
+                        {userInfo.profile_pic_src ? <Avatar style={{ float: 'right' }} src={userInfo.profile_pic_src} />
+                            :
+                            <Avatar size={40}>{userInfo.username[0]}{userInfo.username[1]}</Avatar>}
+                    </>
+                        :
+                        <LoginModal buttonText='Login' />}
                 </Header>
-                <Content style={{ margin: 'auto' }}>
+                <Content>
                     {/* <Layout>
                         <HomepageSider />
                         <Content> */}

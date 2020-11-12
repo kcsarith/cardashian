@@ -26,6 +26,7 @@ Flask-Login = "==0.5.0"
 pyjwt = "==1.7.1"
 flask-praetorian = "==1.0.0"
 flask-session = "==0.3.2"
+boto3 = "==1.16.15"
 
 [requires]
 python_version = "3.8"

@@ -15,8 +15,6 @@ const EditEffect = (props) => {
             [prop_state]: props.value
             ,
         });
-        console.log(event)
-        console.log(props)
     };
 
     const handlePlayerNumberChange = async (event) => {
@@ -24,7 +22,6 @@ const EditEffect = (props) => {
             ...editCardState,
             playerValue: event
         });
-        console.log(event)
     };
 
     const handleCharacterNumberChange = async (event) => {
@@ -32,7 +29,6 @@ const EditEffect = (props) => {
             ...editCardState,
             characterValue: event
         });
-        console.log(event)
     };
 
     const handleEffectNumberChange = async (event) => {
@@ -40,14 +36,12 @@ const EditEffect = (props) => {
             ...editCardState,
             effectValue: event
         });
-        console.log(event)
     };
     const handleEffectTurnChange = async (event) => {
         await setEditCardState({
             ...editCardState,
             turn: event
         });
-        console.log(event)
     };
     return (
         <>

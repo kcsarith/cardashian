@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, Button } from 'antd';
 import LoginModalContent from './LoginModalContent'
-const LoginModal = () => {
+const LoginModal = (props) => {
     const [visible, setVisible] = React.useState(false);
     const [confirmLoading, setConfirmLoading] = React.useState(false);
     const [modalText, setModalText] = React.useState('Content of the modal');
@@ -27,8 +27,8 @@ const LoginModal = () => {
     return (
         <>
             <Button type="primary" onClick={showModal}>
-                Login
-      </Button>
+                {props.buttonText}
+            </Button>
             <Modal
                 title="Title"
                 visible={visible}
