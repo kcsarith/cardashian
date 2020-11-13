@@ -181,11 +181,11 @@ class Card(db.Model):
     manual_description = db.Column(db.Text, default='')
     auto_description = db.Column(db.Text, default='')
     rank = db.Column(db.Integer, default=1)
+    is_charge = db.Column(db.Boolean, default=False)
     health = db.Column(db.Integer, default=100)
     attack = db.Column(db.Integer, default=100)
     defense = db.Column(db.Integer, default=100)
     cost = db.Column(db.Integer, default=1)
-    is_charge = db.Column(db.Boolean, default=False)
     turns = db.Column(db.Integer, default=1)
     longevity = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -207,11 +207,11 @@ class Card(db.Model):
             'manual_description': self.manual_description,
             'auto_description': self.auto_description,
             'rank': self.rank,
+            'is_charge': self.is_charge,
             'health': self.health,
             'attack': self.attack,
             'defense': self.defense,
             'cost': self.cost,
-            'is_charge': self.is_charge,
             'turns': self.turns,
             'longevity': self.longevity,
             'created_at': self.created_at,

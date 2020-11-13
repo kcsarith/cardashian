@@ -26,7 +26,7 @@ guard.init_app(app, User)
 # Application Security
 
 CORS(app)
-# CSRFProtect(app)
+CSRFProtect(app)
 
 @app.after_request
 def inject_csrf_token(response):

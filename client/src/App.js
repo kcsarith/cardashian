@@ -51,20 +51,20 @@ function App() {
     }
 
     const [userInfo, setUserInfo] = useState({
-        id: null,
-        is_public: null,
-        promotion_points: null,
+        id: 1,
+        is_public: true,
+        promotion_points: 0,
         online_status: 'online',
-        alias: null,
-        username: null,
-        email: null,
-        country: null,
-        city: null,
-        about_me: null,
+        alias: 'No Alias',
+        username: 'guest',
+        email: 'guest@guest.guest',
+        country: 'United States',
+        city: 'San Francisco',
+        about_me: 'I just joined and need to update my profile later.',
         profile_pic_src: null,
         background_src: null,
-        created_at: null,
-        updated_at: null
+        created_at: '2020-11-12 19:17:28.192345',
+        updated_at: '2020-11-12 19:17:28.19235'
     });
     const [editCardState, setEditCardState] = useState({
         playerTarget: '',
@@ -142,6 +142,11 @@ function App() {
                         path="/cards"
                         exact={true}
                         component={CardsPage}
+                    />
+                    <Route
+                        path="/about"
+                        exact={true}
+                    // component={CardsPage}
                     />
                     <Route
                         path="/card-edit"
