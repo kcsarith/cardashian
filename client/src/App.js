@@ -44,27 +44,39 @@ function App() {
         })
         if (res.ok) {
             const data = await res.json();
-            const { user } = data[0]
+            const { user, access_token } = data[0]
+            Cookies.set("XSRF_TOKEN", access_token)
+            await setUserInfo(user);
+            return user;
+        }
+    }
+
+    const getUserFromXSRF = async () => {
+        const XSRF_Token = await Cookies.get()
+        console.log(XSRF_Token)
+        const res = await fetchWithCSRF('/api/session/load')
+        if (res.ok) {
+            const { user } = await res.json();
             await setUserInfo(user);
             return user;
         }
     }
 
     const [userInfo, setUserInfo] = useState({
-        id: 1,
-        is_public: true,
-        promotion_points: 0,
-        online_status: 'online',
-        alias: 'No Alias',
-        username: 'guest',
-        email: 'guest@guest.guest',
-        country: 'United States',
-        city: 'San Francisco',
-        about_me: 'I just joined and need to update my profile later.',
-        profile_pic_src: null,
-        background_src: null,
-        created_at: '2020-11-12 19:17:28.192345',
-        updated_at: '2020-11-12 19:17:28.19235'
+        // id: 1,
+        // is_public: true,
+        // promotion_points: 0,
+        // online_status: 'online',
+        // alias: 'No Alias',
+        // username: 'guest',
+        // email: 'guest@guest.guest',
+        // country: 'United States',
+        // city: 'San Francisco',
+        // about_me: 'I just joined and need to update my profile later.',
+        // profile_pic_src: null,
+        // background_src: null,
+        // created_at: '2020-11-12 19:17:28.192345',
+        // updated_at: '2020-11-12 19:17:28.19235'
     });
     const [editCardState, setEditCardState] = useState({
         playerTarget: '',
@@ -89,6 +101,8 @@ function App() {
                 method: 'GET',
                 credentials: 'include'
             });
+            const xsrfFect = await getUserFromXSRF();
+            console.log(xsrfFect)
             if (response.ok) {
                 const authData = await response.json();
                 setFetchWithCSRF(() => {

@@ -7,6 +7,13 @@ import flask_praetorian
 
 bp = Blueprint("session", __name__)
 
+@bp.route('/load')
+def load_user():
+    XSRF_TOKEN = request.cookies.get('XSRF_TOKEN')
+    extracted_data = guard.extract_jwt_token(XSRF_TOKEN)
+    user = User.query.get_or_404(extracted_data['id'])
+    return {'user': user.to_dict()}
+
 @bp.route('/token-verify')
 def verify_token():
     get_user_from_registration_token()
