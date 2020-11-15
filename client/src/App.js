@@ -13,6 +13,7 @@ import GamesPage from './views/GamesPage.js';
 import CardsPage from './views/CardsPage';
 import UserPage from './views/UserPage';
 import Settings from './views/Settings';
+import Signup from './views/Signup';
 import EditCardLayout from './components/EditCardLayout';
 
 import { UserContext } from './Context';
@@ -117,6 +118,8 @@ function App() {
                         return fetch(resource, init);
                     }
                 });
+            } else {
+                console.log('Failed to fetch login info from token')
             }
         }
         restoreCSRF();
@@ -146,6 +149,11 @@ function App() {
                         path="/"
                         exact={true}
                         component={Homepage}
+                    />
+                    <Route
+                        path="/signup"
+                        exact={true}
+                        component={Signup}
                     />
                     <Route
                         path="/games"

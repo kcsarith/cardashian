@@ -78,7 +78,7 @@ const UserPage = () => {
             <HeroImage
                 imageSrc={profilePageState.user.background_src ?
                     profilePageState.user.background_src :
-                    `https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&w=1000&q=80`}
+                    `https://csshint.com/wp-content/uploads/2020/01/CSS-Animated-Backgrounds-2.gif`}
                 color="#000000"
                 gradientDirection="to bottom right"
                 height="400px"

@@ -28,15 +28,14 @@ with app.app_context():
                 country="NY", hashed_password=guard.hash_password('password'), promotion_points=745)
     db.session.add_all([guest, ian, javier, dean, angela, soonmi, alissa, demo])
     db.session.commit()
-
-    default_game = Game(owner_id=7)
-    db.session.add(default_game)
-    db.session.commit()
+    game_iterable = 1
+    while game_iterable <= 8:
+        db.session.add(Game(owner_id=game_iterable))
+        db.session.commit()
+        db.session.add(CardCategory(game_id=game_iterable, list_order=1))
+        game_iterable += 1
+        db.session.commit()
 
     default_card_image = CardImage(game_id=1, name='default', category='card', src='https://www.thepokerdepot.com/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/t/p/tpd-standard-fronts-product.jpg')
     db.session.add(default_card_image)
-    db.session.commit()
-
-    default_card_category = CardCategory(game_id=1, list_order=1)
-    db.session.add(default_card_category)
     db.session.commit()

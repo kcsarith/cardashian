@@ -11,8 +11,11 @@ bp = Blueprint("session", __name__)
 def load_user():
     XSRF_TOKEN = request.cookies.get('XSRF_TOKEN')
     extracted_data = guard.extract_jwt_token(XSRF_TOKEN)
-    user = User.query.get_or_404(extracted_data['id'])
-    return {'user': user.to_dict()}
+    try:
+        user = User.query.get_or_404(extracted_data['id'])
+        return {'user': user.to_dict()}
+    except:
+        return {'message': 'Cannot get user based on Token'}
 
 @bp.route('/token-verify')
 def verify_token():

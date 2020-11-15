@@ -43,19 +43,19 @@ def get_games_by_user(owner_id):
     games = Game.query.filter(Game.owner_id == owner_id)
     return {'games': [game.to_dict() for game in games]}
 
-@bp.route('/user/<int:owner_id>/<gamename>', methods=['GET', 'DELETE', 'PATCH'])
-def crud_by_user_and_name(owner_id, gamename):
+@bp.route('/user/<int:owner_id>/<int:game_id>', methods=['GET', 'DELETE', 'PATCH'])
+def crud_by_user_and_name(owner_id, game_id):
     if request.method == 'GET':
-        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == gamename ).first()
+        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == game_id ).first()
         return {"game": game.to_dict()}
     elif request.method == 'DELETE':
-        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == gamename)
+        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == game_id)
         deleted_categories = CardCategory.query.filter(CardCategory.game_id == game[0].id).delete()
         deleted_images = CardImage.query.filter(CardImage.game_id == game[0].id).delete()
         game.delete()
         return {'response': 'deleted_game'}
     elif request.method == 'PATCH':
-        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == gamename).first()
+        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == game_id).first()
 
         new_id = request.json.get("id")
         new_is_public = request.json.get("is_public")
