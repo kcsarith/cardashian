@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Row, Col, Image, Typography, Layout } from 'antd';
+import { Form, Input, InputNumber, Button, Row, Col, Image, Typography, Select } from 'antd';
+import UploadBackground from './Signup/UploadBackground'
+import { countries } from '../cardData';
 const layout = {
     labelCol: {
         span: 6,
@@ -30,6 +32,7 @@ const Signup = () => {
         }}>
             <Col span={12}>
                 <Image height='100%' width={'100%'} src="https://www.abf.com.au/wp-content/uploads/2012/09/ABF-new.jpg" preview={false} />
+                {/* <UploadBackground /> */}
             </Col>
             <Col span={12} style={{ backgroundColor: 'white', padding: '5em 5em' }}>
                 <Typography.Title style={{ textAlign: 'center' }}>Join Cardashian</Typography.Title>
@@ -63,17 +66,26 @@ const Signup = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name={['user', 'age']}
-                        label="Age"
-                        rules={[
-                            {
-                                type: 'number',
-                                min: 0,
-                                max: 99,
-                            },
-                        ]}
+                        name={['user', 'country']}
+                        label="Country"
                     >
-                        <InputNumber />
+                        <Select
+                            showSearch
+                            style={{ width: '100%' }}
+                            placeholder="Select a country"
+                            optionFilterProp="children"
+                        // filterOption={(input, option) =>
+                        //     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        // }
+                        >
+                            {countries.map((ele, index) => <Select.Option key={index} value={ele.code}>{ele.name}</Select.Option>)}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        name={['user', 'city']}
+                        label="City"
+                    >
+                        <Input />
                     </Form.Item>
                     <Form.Item name={['user', 'website']} label="Website">
                         <Input />
