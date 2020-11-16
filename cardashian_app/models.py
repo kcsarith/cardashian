@@ -1,11 +1,13 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import relationship
 import datetime
 
 from .extensions import db, guard
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
+    # __tablename__ = 'users'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     roles = db.Column(db.Text, default='Member')
@@ -25,6 +27,18 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True, server_default="true")
+
+    games = db.relationship("Game", backref="user", lazy="select", uselist=False)
+    card_favorites = db.relationship("CardFavorite", backref="user", lazy="select", uselist=False)
+    decks = db.relationship("Deck", backref="user", lazy="select")
+    card_comments = db.relationship("CardComment", backref="user", lazy="select", uselist=False)
+    user_tags = db.relationship("UserTag", backref="user", lazy="select", uselist=False)
+
+    # games = relationship("Game", back_populates="user")
+    # card_favorites = relationship("CardFavorite", back_populates="user")
+    # decks = relationship("Deck", back_populates="user")
+    # card_comments = relationship("CardComment", back_populates="user")
+    # user_tags = relationship("UserTag", back_populates="user")
 
     @property
     def rolenames(self):
@@ -108,12 +122,12 @@ class User(db.Model, UserMixin):
 
 
 class Game(db.Model):
-    __tablename__ = 'games'
-    __table_args__ = (db.UniqueConstraint('owner_id', 'name'),)
+    # __tablename__ = 'games'
+    __table_args__ = (db.UniqueConstraint('user_id', 'name'),{'extend_existing': True})
 
     id = db.Column(db.Integer, primary_key=True)
     is_public = db.Column(db.Boolean, default=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     promotion_points = db.Column(db.Integer, default=1000)
     name = db.Column(db.String(63), default='Untitled', nullable=False )
     description = db.Column(db.String(255), default='No description' )
@@ -135,11 +149,24 @@ class Game(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+
+    cards= db.relationship("Card", backref="game", lazy="select", uselist=False)
+    card_categories= db.relationship("CardCategory", backref="game", lazy="select", uselist=False)
+    card_images= db.relationship("CardImage", backref="game", lazy="select", uselist=False)
+    game_tags = db.relationship("GameTag", backref="game", lazy="select", uselist=False)
+
+    # cards= relationship("Card", back_populates="game")
+    # card_categories= relationship("CardCategory", back_populates="game")
+    # card_images= relationship("CardImage", back_populates="game")
+    # game_tags = relationship("GameTag", back_populates="game")
+
+    # user= relationship("User", back_populates="games")
+
     def to_dict(self):
         return {
             'id': self.id,
             'is_public': self.is_public,
-            'owner_id' : self.owner_id,
+            'user_id' : self.user_id,
             'promotion_points': self.promotion_points,
             'name' : self.name,
             'description' : self.description,
@@ -162,16 +189,16 @@ class Game(db.Model):
             'updated_at' : self.updated_at
         }
 class Card(db.Model):
-    __tablename__ = 'cards'
-    __table_args__ = (db.UniqueConstraint('game_id', 'name'),)
+    # __tablename__ = 'cards'
+    __table_args__ = (db.UniqueConstraint('game_id', 'name'), {'extend_existing': True})
 
     id = db.Column(db.Integer, primary_key=True)
     is_public = db.Column(db.Boolean, default=True)
     is_special_card = db.Column(db.Boolean, default=True)
     is_spell = db.Column(db.Boolean, default=False)
-    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=False)
     card_image_src = db.Column(db.Text, default='https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg')
-    category_id = db.Column(db.Integer, db.ForeignKey('card_categories.id'), default=1)
+    category_id = db.Column(db.Integer, db.ForeignKey('card_category.id'), default=1)
     promotion_points = db.Column(db.Integer, default=1000)
     name = db.Column(db.String(63), default='Untitled', nullable=False)
     artist = db.Column(db.String(63), default='Anonymous')
@@ -189,83 +216,81 @@ class Card(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'is_public': self.is_public,
-            'is_special_card': self.is_special_card,
-            'is_spell': self.is_spell,
-            'game_id': self.game_id,
-            'card_image_src': self.card_image_src,
-            'category_id': self.category_id,
-            'promotion_points': self.promotion_points,
-            'name': self.name,
-            'artist': self.artist,
-            'description_title': self.description_title,
-            'manual_description': self.manual_description,
-            'auto_description': self.auto_description,
-            'rank': self.rank,
-            'is_charge': self.is_charge,
-            'health': self.health,
-            'attack': self.attack,
-            'defense': self.defense,
-            'cost': self.cost,
-            'turns': self.turns,
-            'longevity': self.longevity,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-        }
+    card_favorites = db.relationship("CardFavorite", backref="card", uselist=False)
+    decks = db.relationship("Deck", backref="card", uselist=False)
+    card_effects = db.relationship("CardEffect", backref="card", uselist=False)
+    card_comments = db.relationship("CardComment", backref="card", uselist=False)
+    card_tags = db.relationship("CardTag", backref="card", uselist=False)
+
+    # card_favorites = relationship("CardFavorite", back_populates="card")
+    # decks = relationship("Deck", back_populates="card")
+    # card_effects = relationship("CardEffect", back_populates="card")
+    # card_comments = relationship("CardComment", back_populates="card")
+    # card_tags = relationship("CardTag", back_populates="card")
+
+    # game = relationship("Game", back_populates="cards")
+    # card_category = relationship("CardCategory", back_populates="cards")
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class CardFavorite(db.Model):
-    __tablename__ = 'card_favorites'
-    __table_args__ = (db.UniqueConstraint('card_id', 'owner_id', 'folder'),)
+    # __tablename__ = 'card_favorites'
+    __table_args__ = (db.UniqueConstraint('card_id', 'user_id', 'folder'),{'extend_existing': True})
 
     id = db.Column(db.Integer, primary_key=True)
-    card_id= db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
-    owner_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    card_id= db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
+    user_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     folder = db.Column(db.String(31), nullable=False)
     date_added = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+    # user = relationship("User", back_populates="card_favorites")
+    # card = relationship("Card", back_populates="card_favorites")
     def to_dict(self):
         return {
             'id' : self.id,
             'card_id' : self.card_id,
-            'owner_id' : self.owner_id,
+            'user_id' : self.user_id,
             'folder'  : self.folder,
             'date_added' : self.date_added
         }
 
 class Deck(db.Model):
-    __tablename__ = 'decks'
-    __table_args__ = (db.UniqueConstraint('card_id', 'owner_id', 'name') ,)
+    # __tablename__ = 'decks'
+    __table_args__ = (db.UniqueConstraint('card_id', 'user_id', 'name') ,{'extend_existing': True})
     id = db.Column(db.Integer, primary_key=True)
-    card_id= db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
-    owner_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    card_id= db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
+    user_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(31), default='Untitled Deck', nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+    # user= relationship("User", back_populates="decks")
+    # card = relationship("Card", back_populates="decks")
     def to_dict(self):
         return {
             'id': self.id,
             'card_id': self.card_id,
-            'owner_id': self.owner_id,
+            'user_id': self.user_id,
             'name' : self.name,
             'created_at' : self.created_at,
             'updated_at' : self.updated_at,
         }
 
 class CardCategory(db.Model):
-    __tablename__ = 'card_categories'
-    __table_args__ = (db.UniqueConstraint('game_id', 'list_order', 'name'),)
+    # __tablename__ = 'card_categories'
+    __table_args__ = (db.UniqueConstraint('game_id', 'list_order', 'name'),{'extend_existing': True})
 
     id = db.Column(db.Integer, primary_key=True)
-    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=False)
     id_prefix = db.Column(db.String(2), default='XX', nullable=False)
     list_order = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(31), default='Generic', nullable=False)
     frame_color = db.Column(db.String(9), default='#cccccc', nullable=False)
 
+    cards = db.relationship("Card", backref="card_category")
+    # cards = relationship("Card", back_populates="card_category")
+
+    # game = relationship("Game", back_populates="card_categories")
     def to_dict(self):
         return {
             'id': self.id,
@@ -277,14 +302,15 @@ class CardCategory(db.Model):
         }
 
 class CardImage(db.Model):
-    __tablename__ = 'card_images'
-
+    # __tablename__ = 'card_images'
+    __table_args__ ={'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    game_id= db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
+    game_id= db.Column(db.Integer, db.ForeignKey('game.id'), nullable=False)
     src = db.Column(db.String(255), default=None)
     name = db.Column(db.String(31), default='Untitled', nullable=False)
     category = db.Column(db.String(31), default='none', nullable=False)
-    # Categories are 1. profile_pic 2. background. 3. card
+
+    # game = relationship("Game", back_populates="card_images")
     def to_dict(self):
         return {
             'id': self.id,
@@ -295,9 +321,11 @@ class CardImage(db.Model):
         }
 
 class CardEffect(db.Model):
-    __tablename__ = 'card_effect_pieces'
+    # __tablename__ = 'card_effect_pieces'
+    __table_args__ = {'extend_existing': True}
+
     id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
     list_order = db.Column(db.Integer, nullable=False)
     player_condition_target = db.Column(db.String(15), default=None)
     player_condition = db.Column(db.String(255), default=None)
@@ -312,6 +340,7 @@ class CardEffect(db.Model):
     value = db.Column(db.Integer, default=0)
     turns = db.Column(db.Integer, default=0)
 
+    # card = relationship("Card", back_populates="card_effects")
     def to_dict(self):
         return {
             'id': self.id,
@@ -332,16 +361,19 @@ class CardEffect(db.Model):
         }
 
 class CardComment(db.Model):
-    __tablename__ = 'card_comments'
+    # __tablename__ = 'card_comments'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    parent_comment_id = db.Column(db.Integer, db.ForeignKey('card_comments.id'), default=None)
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    parent_comment_id = db.Column(db.Integer, db.ForeignKey('card_comment.id'), default=None)
     message = db.Column(db.Text, default='')
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+    # user = relationship("User", back_populates="card_comments")
+    # card = relationship("Card", back_populates="card_comments")
     def to_dict(self):
         return {
             'id': self.id,
@@ -355,11 +387,13 @@ class CardComment(db.Model):
 
 
 class UserTag(db.Model):
-    __tablename__ = 'user_tags'
-    __table_args__ = (db.UniqueConstraint('user_id', 'name'),)
+    # __tablename__ = 'user_tags'
+    __table_args__ = (db.UniqueConstraint('user_id'),{'extend_existing': True})
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(15), default='no tag', nullable=False)
+
+    # user = relationship("User", back_populates="user_tags")
 
     def to_dict(self):
         return {
@@ -369,13 +403,13 @@ class UserTag(db.Model):
         }
 
 class CardTag(db.Model):
-    __tablename__ = 'card_tags'
-    __table_args__ = (db.UniqueConstraint('card_id', 'name'),)
-
+    # __tablename__ = 'card_tags'
+    __table_args__ = (db.UniqueConstraint('card_id', 'name'),{'extend_existing': True})
     id = db.Column(db.Integer, primary_key=True)
-    card_id = db.Column(db.Integer, db.ForeignKey('cards.id'), nullable=False)
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'), nullable=False)
     name = db.Column(db.String(15), default='no tag', nullable=False)
 
+    # card = relationship("Card", back_populates="card_tags")
     def to_dict(self):
         return {
             'id': self.id,
@@ -384,13 +418,14 @@ class CardTag(db.Model):
         }
 
 class GameTag(db.Model):
-    __tablename__ = 'game_tags'
-    __table_args__ = (db.UniqueConstraint('game_id', 'name'),)
-
+    # __tablename__ = 'game_tags'
+    __table_args__ = (db.UniqueConstraint('game_id', 'name'),{'extend_existing': True})
     id = db.Column(db.Integer, primary_key=True)
-    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=False)
     name = db.Column(db.String(15), default='no tag', nullable=False)
 
+
+    # game = relationship("Game", back_populates="game_tags")
     def to_dict(self):
         return {
             'id': self.id,

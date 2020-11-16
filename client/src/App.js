@@ -13,8 +13,11 @@ import Homepage from './views/Homepage';
 import GamesPage from './views/GamesPage.js';
 import CardsPage from './views/CardsPage';
 import UserPage from './views/UserPage';
+import UserGamePage from './views/UserGamePage';
+import UserCardPage from './views/UserCardPage';
 import Settings from './views/Settings';
 import Signup from './views/Signup';
+import AboutPage from './views/AboutPage.js';
 import EditCardLayout from './components/EditCardLayout';
 
 import { UserContext } from './Context';
@@ -40,6 +43,8 @@ function App() {
             return user;
         }
     }
+
+
 
     const getUserFromXSRF = async () => {
         const XSRF_Token = await Cookies.get()
@@ -161,7 +166,7 @@ function App() {
                     <Route
                         path="/about"
                         exact={true}
-                    // component={CardsPage}
+                        component={AboutPage}
                     />
                     <Route
                         path="/card-edit"
@@ -196,12 +201,12 @@ function App() {
                     <Route
                         path="/:username/:gamename"
                         exact={true}
-                        component={UserPage}
+                        component={UserGamePage}
                     />
                     <Route
                         path="/:username/:gamename/:cardname"
                         exact={true}
-                        component={UserPage}
+                        component={UserCardPage}
                     />
                 </Switch>
             </NavAndFooter >

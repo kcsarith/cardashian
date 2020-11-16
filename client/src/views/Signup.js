@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Form, Input, message, Button, Row, Col, Avatar, Typography, Select, Upload, Image } from 'antd';
 import { LoadingOutlined, PlusOutlined, InboxOutlined, UserOutlined } from '@ant-design/icons';
-
+import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie'
 
 import { UserContext } from '../Context';
@@ -39,7 +39,7 @@ const normFile = (e) => {
 };
 
 const Signup = () => {
-
+    const history = useHistory();
     const { fetchWithCSRF, setUserInfo } = useContext(UserContext);
     const onFinish = async (values) => {
         if (uploadProfilePicState.filename) values.user.profile_pic_src = `https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/users/${formInputState.username}/profiles/${uploadProfilePicState.filename}`
@@ -58,6 +58,7 @@ const Signup = () => {
             const { user, access_token } = data[0]
             Cookies.set("XSRF_TOKEN", access_token)
             await setUserInfo(user);
+            history.push(`/${user.username}`)
             return user;
         }
     };
@@ -288,7 +289,7 @@ const Signup = () => {
                     > */}
                         {formInputState.username && <>
                             <Col span={4} style={{ alignSelf: 'center', marginBottom: '3em' }}>
-                                <ImgCrop shape='round' name="avatar">
+                                <ImgCrop shape='round' rotate name="avatar">
                                     <Upload
                                         name="file"
                                         listType="picture-card"
@@ -304,7 +305,7 @@ const Signup = () => {
                             </Col>
                             {/* </Form.Item> */}
                             <Col span={20} style={{ marginBottom: '3em' }}>
-                                <ImgCrop aspect={3 / 1}>
+                                <ImgCrop aspect={3 / 1} rotate>
                                     {/* <Form.Item
                             name={["user", "background_pic"]}
                             label="Background"

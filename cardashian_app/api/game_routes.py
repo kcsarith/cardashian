@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from cardashian_app.models import db, Game, CardCategory,CardImage
+from cardashian_app.models import db, Game, CardCategory,CardImage,User
 from flask_login import login_required
 import datetime
 
@@ -16,10 +16,10 @@ def get_all_games():
     response = Game.query.order_by(Game.promotion_points.desc())
     return {"games": [game.to_dict() for game in response]}
 
-@bp.route('/new/owner/<int:owner_id>', methods=['POST'])
-def add_new_game_by_owner(owner_id):
+@bp.route('/new/user/<int:user_id>', methods=['POST'])
+def add_new_game_by_user(user_id):
 
-    i = len(list(Game.query.filter(Game.owner_id == owner_id)))
+    i = len(list(Game.query.filter(Game.user_id == user_id)))
 
     while len(list(Game.query.filter(Game.name == f'Untitled {i}'))):
         i += 1
@@ -29,7 +29,7 @@ def add_new_game_by_owner(owner_id):
 
 
     new_game = Game(
-        owner_id=owner_id,
+        user_id=user_id,
         name=f'Untitled {i}'
     )
 
@@ -43,28 +43,34 @@ def delete_game_by_id(game_id):
     deleted_game = Game.query.filter(Game.id == game_id).delete()
     return {'response': deleted_game}
 
-@bp.route('/user/<int:owner_id>')
-def get_games_by_user(owner_id):
-    games = Game.query.filter(Game.owner_id == owner_id)
+@bp.route('/user/<int:user_id>')
+def get_games_by_user(user_id):
+    games = Game.query.filter(Game.user_id == user_id)
     return {'games': [game.to_dict() for game in games]}
 
-@bp.route('/user/<int:owner_id>/<int:game_id>', methods=['GET', 'DELETE', 'PATCH'])
-def crud_by_user_and_name(owner_id, game_id):
+@bp.route('/user/<username>/<gamename>')
+def get_games_by_user_and_name(username,gamename):
+    user = User.query.filter(User.username==username).first()
+    game = Game.query.filter(Game.name==gamename).filter(Game.user_id==user.id).first()
+    return ({'game': game.to_dict()})
+
+@bp.route('/user/<int:user_id>/<int:game_id>', methods=['GET', 'DELETE', 'PATCH'])
+def crud_by_user_and_name(user_id, game_id):
     if request.method == 'GET':
-        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == game_id ).first()
+        game = Game.query.filter(Game.user_id == user_id).filter(Game.name == game_id ).first()
         return {"game": game.to_dict()}
     elif request.method == 'DELETE':
-        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == game_id)
+        game = Game.query.filter(Game.user_id == user_id).filter(Game.name == game_id)
         deleted_categories = CardCategory.query.filter(CardCategory.game_id == game[0].id).delete()
         deleted_images = CardImage.query.filter(CardImage.game_id == game[0].id).delete()
         game.delete()
         return {'response': 'deleted_game'}
     elif request.method == 'PATCH':
-        game = Game.query.filter(Game.owner_id == owner_id).filter(Game.name == game_id).first()
+        game = Game.query.filter(Game.user_id == user_id).filter(Game.name == game_id).first()
 
         new_id = request.json.get("id")
         new_is_public = request.json.get("is_public")
-        new_owner_id = request.json.get("owner_id")
+        new_user_id = request.json.get("user_id")
         new_promotion_points = request.json.get("promotion_points")
         new_name =request.json.get("name")
         new_description = request.json.get("description")
@@ -86,8 +92,8 @@ def crud_by_user_and_name(owner_id, game_id):
 
         if new_is_public is not None:
             game.is_public = new_is_public
-        if new_owner_id is not None:
-            game.owner_id = new_owner_id
+        if new_user_id is not None:
+            game.user_id = new_user_id
         if new_promotion_points is not None:
             game.promotion_points = new_promotion_points
         if new_name is not None:
