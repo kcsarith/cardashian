@@ -36,7 +36,7 @@ const NavAndFooter = (props) => {
     return (
         <>
             <Layout >
-                <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '48px' }}>
+                <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <a><Title style={{ color: 'white' }} level={3} onClick={handleMenuClick}>CARDASHIAN</Title></a>
                     <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[navigationLocation.pathname.split('/')[1]]} onClick={handleMenuClick}>
                         <Menu.Item key="home">Home</Menu.Item>

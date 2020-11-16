@@ -2,7 +2,6 @@ from flask import Flask, Blueprint,request, url_for, flash, Response, session, j
 # from cardashian_app.filters import datetimeformat, file_type
 from cardashian_app.extensions import get_bucket, get_buckets_list,get_objects_from_path
 
-
 bp = Blueprint('aws', __name__)
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -44,13 +43,16 @@ def files_from_user_and_path(username, pathname):
 
     if request.method =='POST':
         file = request.files['file']
-
+        print('8'*50)
+        print(files)
+        print('8'*50)
         my_bucket = get_bucket()
         # my_bucket.Object(file.filename).put(Body=file)
-        my_bucket.Object(f'{username}/{pathname}/{file.filename}').put(Body=file)
 
-        flash('File uploaded successfully')
+        my_bucket.Object(f'users/{username}/{pathname}/{file.filename}').put(Body=file,ACL='public-read')
+
         return {'message': f'successfully uploaded image {file.filename} to {username}/{pathname}/ '}
+        # return{'request': 'request.json'}
 
 
 @bp.route('/delete', methods=['POST'])

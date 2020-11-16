@@ -19,3 +19,4 @@ wtforms==2.3.3
 flask-praetorian==1.0.0
 flask-session==0.3.2
 boto3 ==1.16.15
+faker ==4.14.2

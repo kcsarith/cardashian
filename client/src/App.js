@@ -1,6 +1,7 @@
 import './App.less';
 import "react-image-gallery/styles/css/image-gallery.css";
 import 'antd/dist/antd.css';
+import './index.css'
 
 import Cookies from 'js-cookie'
 import React, { useMemo, useState, useEffect } from 'react';
@@ -17,18 +18,6 @@ import Signup from './views/Signup';
 import EditCardLayout from './components/EditCardLayout';
 
 import { UserContext } from './Context';
-
-// const PrivateRoute = ({ component: Component, ...rest }) => {
-//     let needLogin = useSelector(state => !state.authentication.id);
-//     return (
-//         <Route {...rest} render={(props) => (
-//             needLogin
-//                 ? <Redirect to='/login' />
-//                 : <Component {...props} />
-//         )} />
-//     )
-// }
-
 
 function App() {
     // let location = useLocation();
@@ -63,22 +52,7 @@ function App() {
         }
     }
 
-    const [userInfo, setUserInfo] = useState({
-        // id: 1,
-        // is_public: true,
-        // promotion_points: 0,
-        // online_status: 'online',
-        // alias: 'No Alias',
-        // username: 'guest',
-        // email: 'guest@guest.guest',
-        // country: 'United States',
-        // city: 'San Francisco',
-        // about_me: 'I just joined and need to update my profile later.',
-        // profile_pic_src: null,
-        // background_src: null,
-        // created_at: '2020-11-12 19:17:28.192345',
-        // updated_at: '2020-11-12 19:17:28.19235'
-    });
+    const [userInfo, setUserInfo] = useState({});
     const [editCardState, setEditCardState] = useState({
         playerTarget: '',
         playerCondition: '',
@@ -93,7 +67,10 @@ function App() {
         effectValue: 0,
         turn: 1,
     });
-    const providerUserInfo = useMemo(() => ({ userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login }), [userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login]);
+
+    const [featuredGamesList, setFeaturedGamesList] = useState([]);
+    const [featuredCardsList, setFeaturedCardsList] = useState([]);
+    const providerUserInfo = useMemo(() => ({ userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login, featuredGamesList, featuredCardsList }), [userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login, featuredGamesList, featuredCardsList]);
 
 
     useEffect(() => {
@@ -102,6 +79,22 @@ function App() {
                 method: 'GET',
                 credentials: 'include'
             });
+            const featuredGamesRes = await fetch('/api/games/featured', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (featuredGamesRes.ok) {
+                const { games } = await featuredGamesRes.json()
+                setFeaturedGamesList(games)
+            }
+            const featuredCardsRes = await fetch('/api/cards/featured', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (featuredCardsRes.ok) {
+                const { cards } = await featuredCardsRes.json()
+                setFeaturedCardsList(cards)
+            }
             const xsrfFect = await getUserFromXSRF();
             console.log(xsrfFect)
             if (response.ok) {

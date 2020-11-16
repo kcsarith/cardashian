@@ -73,7 +73,9 @@ const EditCardLayout = (props) => {
                         <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
                     </Breadcrumb>
                     <div style={{ background: '#fff', padding: 24, minHeight: 580 }}>
-                        {webLocation.pathname.includes('/cards/edit') && <EditCard />}
+                        {webLocation.pathname.includes('effects') && <EditCard />}
+                        {webLocation.pathname.includes('stats') && <EditCard />}
+                        {webLocation.pathname.includes('visuals') && <EditCard />}
                         {props.children}
                     </div>
                 </Content>

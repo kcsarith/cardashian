@@ -88,7 +88,7 @@ const UserPage = () => {
                 textPosition="center"
             >
                 {profilePageState.user.profile_pic_src ? <Avatar size={256} icon={
-                    <Image
+                    <img
                         height={256}
                         width={256}
                         style={{

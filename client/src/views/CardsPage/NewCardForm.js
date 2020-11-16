@@ -44,7 +44,7 @@ const NewCardForm = () => {
         is_spell: false,
         is_charge: false,
         game_id: null,
-        card_image_id: null,
+        card_image_src: null,
         category_id: null,
         name: 'Untitled',
         artist: 'Unknown',
@@ -112,7 +112,7 @@ const NewCardForm = () => {
                 </Select>
             </Form.Item>
             <Form.Item
-                name="card_image_id"
+                name="card_image_src"
                 label="Image">
                 <Select style={{ width: '100%' }}>
                     <Option value="jack">Jack</Option>

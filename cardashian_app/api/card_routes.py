@@ -6,6 +6,12 @@ import datetime
 
 bp = Blueprint('cards', __name__)
 
+@bp.route('/featured')
+def get_all_high_promoted_cards():
+    response = Card.query.order_by(Card.promotion_points.desc()).limit(24)
+    return {"cards": [card.to_dict() for card in response]}
+
+
 @bp.route('/')
 def get_all_cards():
     response = Card.query.all()
@@ -57,7 +63,7 @@ def crud_card_to_game(game_id):
         new_is_public = request.json.get("is_public")
         new_is_special_card = request.json.get("is_special_card")
         new_is_spell = request.json.get("is_spell")
-        new_card_image_id = request.json.get("card_image_id")
+        new_card_image_src = request.json.get("card_image_src")
         new_category_id = request.json.get("category_id")
         new_promotion_points = request.json.get("promotion_points")
         new_name = request.json.get("name")
@@ -80,12 +86,10 @@ def crud_card_to_game(game_id):
             card.is_special_card = new_is_special_card
         if new_is_spell is not None:
             card.is_spell = new_is_spell
-        if new_card_image_id is not None:
-            card.card_image_id = new_card_image_id
+        if new_card_image_src is not None:
+            card.card_image_src = new_card_image_src
         if new_category_id is not None:
             card.category_id = new_category_id
-        if new_card_image_id is not None:
-            card.category_id = new_card_image_id
         if new_promotion_points is not None:
             card.promotion_points = new_promotion_points
         if new_name is not None:

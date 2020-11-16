@@ -50,24 +50,33 @@ def protected_admin():
 @bp.route('/register', methods=['post'])
 def register():
     json_data = request.get_json()
-    username = json_data['username']
-    email = json_data['email']
-    password = json_data['password']
 
+    user = json_data['user']
+    print('8' * 80)
+    print(user)
     new_user = User(
-        username= username,
-        email= email,
-        hashed_password= guard.hash_password(password)
+        username= user['username'],
+        hashed_password= guard.hash_password(user['password'])
     )
+    if 'alias' in user:
+        new_user.alias = user['alias']
+    if 'email' in user:
+        new_user.email = user['email']
+    if 'country' in user:
+        new_user.country = user['country']
+    if 'city' in user:
+        new_user.city = user['city']
+    if 'about_me' in user:
+        new_user.about_me = user['about_me']
+    if 'profile_pic_src' in user:
+        new_user.profile_pic_src = user['profile_pic_src']
+    if 'background_src' in user:
+        new_user.background_src = user['background_src']
     db.session.add(new_user)
     db.session.commit()
 
-    user = guard.authenticate(username, password)
-    return jsonify({'message': 'sucessfully registred a new user!','access_token': guard.encode_jwt_token(user)},200)
-    # ret = {'message': 'successfully sent registration email to user {}'.format(
-    #     new_user.username
-    # )}
-    # return (jsonify(ret), 201)
+    user = guard.authenticate(new_user.username, user['password'])
+    return jsonify({'user': new_user.to_dict(),'access_token': guard.encode_jwt_token(user)},200)
 
 @bp.route('/finalize')
 def finalize():

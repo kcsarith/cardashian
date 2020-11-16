@@ -6,6 +6,11 @@ import datetime
 
 bp = Blueprint('games', __name__)
 
+@bp.route('/featured')
+def get_all_high_promoted_games():
+    response = Game.query.order_by(Game.promotion_points.desc()).limit(8)
+    return {"games": [game.to_dict() for game in response]}
+
 @bp.route('/')
 def get_all_games():
     response = Game.query.order_by(Game.promotion_points.desc())
@@ -78,7 +83,6 @@ def crud_by_user_and_name(owner_id, game_id):
         new_special_card_term = request.json.get("special_card_term")
         new_use_atk = request.json.get("use_atk")
         new_use_def = request.json.get("use_def")
-        new_frame_color = request.json.get("frame_color")
 
         if new_is_public is not None:
             game.is_public = new_is_public
@@ -120,8 +124,6 @@ def crud_by_user_and_name(owner_id, game_id):
             game.use_atk = new_use_atk
         if new_use_def is not None:
             game.use_def = new_use_def
-        if new_frame_color is not None:
-            game.frame_color = new_frame_color
 
         game.updated_at = datetime.datetime.utcnow()
 

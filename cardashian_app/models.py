@@ -116,7 +116,7 @@ class Game(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     promotion_points = db.Column(db.Integer, default=1000)
     name = db.Column(db.String(63), default='Untitled', nullable=False )
-    description = db.Column(db.String(63), default='No description' )
+    description = db.Column(db.String(255), default='No description' )
     home_bg_src = db.Column(db.String(255), default=None)
     game_logo_src = db.Column(db.String(255), default=None)
     player_health_term = db.Column(db.String(15), default='LP')
@@ -132,7 +132,6 @@ class Game(db.Model):
     special_card_term = db.Column(db.String(15), default='POW')
     use_atk = db.Column(db.Boolean, default=False)
     use_def = db.Column(db.Boolean, default=False)
-    frame_color = db.Column(db.String(9), default='CCC')
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
@@ -159,7 +158,6 @@ class Game(db.Model):
             'special_card_term' : self.special_card_term,
             'use_atk' : self.use_atk,
             'use_def' : self.use_def,
-            'frame_color' : self.frame_color,
             'created_at' : self.created_at,
             'updated_at' : self.updated_at
         }
@@ -172,7 +170,7 @@ class Card(db.Model):
     is_special_card = db.Column(db.Boolean, default=True)
     is_spell = db.Column(db.Boolean, default=False)
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'), nullable=False)
-    card_image_id = db.Column(db.Integer, db.ForeignKey('card_images.id'), default=1)
+    card_image_src = db.Column(db.Text, default='https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg')
     category_id = db.Column(db.Integer, db.ForeignKey('card_categories.id'), default=1)
     promotion_points = db.Column(db.Integer, default=1000)
     name = db.Column(db.String(63), default='Untitled', nullable=False)
@@ -198,7 +196,7 @@ class Card(db.Model):
             'is_special_card': self.is_special_card,
             'is_spell': self.is_spell,
             'game_id': self.game_id,
-            'card_image_id': self.card_image_id,
+            'card_image_src': self.card_image_src,
             'category_id': self.category_id,
             'promotion_points': self.promotion_points,
             'name': self.name,
@@ -266,7 +264,7 @@ class CardCategory(db.Model):
     id_prefix = db.Column(db.String(2), default='XX', nullable=False)
     list_order = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(31), default='Generic', nullable=False)
-    frame_color = db.Column(db.String(9), default='CCC', nullable=False)
+    frame_color = db.Column(db.String(9), default='#cccccc', nullable=False)
 
     def to_dict(self):
         return {
