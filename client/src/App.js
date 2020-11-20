@@ -18,6 +18,7 @@ import UserCardPage from './views/UserCardPage';
 import Settings from './views/Settings';
 import Signup from './views/Signup';
 import AboutPage from './views/AboutPage.js';
+import TestCard from './views/TestCard.js';
 import EditCardLayout from './components/EditCardLayout';
 
 import { UserContext } from './Context';
@@ -49,7 +50,10 @@ function App() {
     const getUserFromXSRF = async () => {
         const XSRF_Token = await Cookies.get()
         console.log(XSRF_Token)
-        const res = await fetchWithCSRF('/api/session/load')
+        const res = await fetchWithCSRF('/api/session/load', {
+            method: 'GET',
+            credentials: 'include'
+        })
         if (res.ok) {
             const { user } = await res.json();
             await setUserInfo(user);
@@ -72,10 +76,10 @@ function App() {
         effectValue: 0,
         turn: 1,
     });
-
     const [featuredGamesList, setFeaturedGamesList] = useState([]);
     const [featuredCardsList, setFeaturedCardsList] = useState([]);
-    const providerUserInfo = useMemo(() => ({ userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login, featuredGamesList, featuredCardsList }), [userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login, featuredGamesList, featuredCardsList]);
+    const [featuredUsersList, setFeaturedUsersList] = useState([]);
+    const providerUserInfo = useMemo(() => ({ featuredUsersList, userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login, featuredGamesList, featuredCardsList }), [featuredUsersList, userInfo, setUserInfo, editCardState, setEditCardState, fetchWithCSRF, login, featuredGamesList, featuredCardsList]);
 
 
     useEffect(() => {
@@ -100,6 +104,15 @@ function App() {
                 const { cards } = await featuredCardsRes.json()
                 setFeaturedCardsList(cards)
             }
+            // const featuredUsersRes = await fetch('/api/users', {
+            //     method: 'GET',
+            //     // credentials: 'include'
+            // });
+            // if (featuredUsersRes.ok) {
+            //     const { users } = await featuredUsersRes.json()
+            //     console.log(users)
+            //     setFeaturedUsersList(users)
+            // }
             const xsrfFect = await getUserFromXSRF();
             console.log(xsrfFect)
             if (response.ok) {
@@ -167,6 +180,10 @@ function App() {
                         path="/about"
                         exact={true}
                         component={AboutPage}
+                    /><Route
+                        path="/test-card"
+                        exact={true}
+                        component={TestCard}
                     />
                     <Route
                         path="/card-edit"

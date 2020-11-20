@@ -6,7 +6,7 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_session import Session
 
 from cardashian_app.models import User
-from cardashian_app.api import session, home,user_routes, image_routes, card_routes, game_routes, category_routes, card_comment_routes, aws_routes
+from cardashian_app.api import session, home, user_routes, image_routes, card_routes, game_routes, category_routes, card_comment_routes, aws_routes, friend_routes,profile_comment_routes
 from cardashian_app.config import Config
 from flask_login import LoginManager
 from .extensions import db, guard, s3
@@ -21,7 +21,8 @@ app.register_blueprint(card_routes.bp, url_prefix='/api/cards')
 app.register_blueprint(game_routes.bp, url_prefix='/api/games')
 app.register_blueprint(category_routes.bp, url_prefix='/api/categories')
 app.register_blueprint(card_comment_routes.bp, url_prefix='/api/card-comments')
-app.register_blueprint(aws_routes.bp, url_prefix='/api/aws')
+app.register_blueprint(friend_routes.bp, url_prefix='/api/friends')
+app.register_blueprint(profile_comment_routes.bp, url_prefix='/api/profile-comments')
 
 db.init_app(app)
 sess = Session(app)
@@ -30,7 +31,7 @@ guard.init_app(app, User)
 # Application Security
 
 CORS(app)
-# CSRFProtect(app)
+CSRFProtect(app)
 
 @app.after_request
 def inject_csrf_token(response):

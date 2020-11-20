@@ -7,7 +7,7 @@ const AboutPage = () => {
             <Typography.Title style={{ textAlign: 'center', color: 'white', padding: '1em' }} level={1}>About Us</Typography.Title>
         </div>
         <div style={{ width: "100%", display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-            <Descriptions layout="vertical" bordered>
+            <Descriptions layout="vertical" bordered style={{ backgroundColor: 'white' }}>
                 <Descriptions.Item label="Product">Lorem ipsum</Descriptions.Item>
                 <Descriptions.Item label="Billing Mode">dolor</Descriptions.Item>
                 <Descriptions.Item label="Automatic Renewal">YES</Descriptions.Item>

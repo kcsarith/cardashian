@@ -1,57 +1,62 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import ImageGallery from 'react-image-gallery';
 import { Button, Row, Card, Col, Typography, Statistic, PageHeader, Tabs } from 'antd'
 
 
 import { UserContext } from '../Context';
 
-const hamsterSrc = 'https://media2.giphy.com/media/g04lCCTUHSw03W7pqD/200.gif'
-
-const images = [
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-];
-
-const recommendedGames = [
-    { title: 'Game 1', imageSrc: hamsterSrc, creator: 'Nobody' },
-    { title: 'Game 2', imageSrc: hamsterSrc, creator: 'Nobody' },
-    { title: 'Game 2', imageSrc: hamsterSrc, creator: 'Nobody' }
-];
 const Homepage = () => {
 
-    const { userInfo, featuredGamesList, featuredCardsList } = useContext(UserContext);
+    const { userInfo, featuredGamesList, featuredCardsList, featuredUsersList, fetchWithCSRF } = useContext(UserContext);
+    console.log(featuredUsersList)
     const [imageGalleryState, setImageGalleryState] = useState({ currentSlide: 0 });
+    const [usersListState, setUsersListState] = useState([]);
     const gameImages = featuredGamesList.map(ele => {
         return { original: ele.home_bg_src, thumbnail: 'https://picsum.photos/id/1015/250/150/' }
     });
-    console.log(gameImages)
     const handleSlide = (e) => {
         setImageGalleryState({ ...imageGalleryState, currentSlide: e });
     }
+    useEffect(() => {
+        async function fetchUsers() {
+            const res = await fetchWithCSRF(`/api/users`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+            if (res) {
+                const { users } = await res.json()
+                console.log(users)
+                await setUsersListState({ users });
+            }
+        }
 
+        fetchUsers();
+    }, []);
     return (
         <>
-            <div style={{ backgroundColor: 'grey' }}>
+            <div style={{ backgroundImage: `url(https://thumbs.gfycat.com/ComplexNiceBadger-max-1mb.gif)`, backgroundSize: 'contain' }}>
+                <Typography.Title style={{ textAlign: 'center', color: 'white', padding: '1em' }} level={1}>Users</Typography.Title>
+            </div>
+            <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                {
+                    usersListState.users && usersListState.users.map((ele, index) => {
+                        return (
+                            <Col span={5} style={{ padding: '1em', overflow: 'hidden' }} key={ele.id}>
+                                <a href={`${ele.username}`}>
+                                    <Card
+                                        cover={<img alt="example" height={256} src={ele.profile_pic_src ? ele.profile_pic_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />}
+                                    >
+                                        <Card.Meta title={ele.username} />
+                                    </Card>
+                                </a>
+                            </Col>
+                        )
+                    })
+                }
+            </Row>
+            <div style={{ backgroundImage: `url(https://thumbs.gfycat.com/ComplexNiceBadger-max-1mb.gif)`, backgroundSize: 'contain' }}>
                 <Typography.Title style={{ textAlign: 'center', color: 'white', padding: '1em' }} level={1}>Featured Games</Typography.Title>
             </div>
-            <Row gutter={16} style={{ display: 'flex', justifyContent: 'center' }}>
-                <Col span={12}>
-                    <Statistic title="Active Users" value={58} style={{ textAlign: 'center' }} />
-                </Col>
-                <Col span={12}>
-                    <Statistic title="Total Cards" value={600} style={{ textAlign: 'center' }} />
-                </Col>
-            </Row>
             {/* <Row style={{ justifyContent: 'center', alignItems: 'center', marginTop: '3em' }}>
                 <Col span={8} >
                     <ImageGallery originalClass={{ objectFit: 'cover', height: '640px', width: '240px' }}
@@ -102,7 +107,7 @@ const Homepage = () => {
                                     <Card
                                         cover={<img alt="example" height={256} src={ele.home_bg_src ? ele.home_bg_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />}
                                     >
-                                        <Card.Meta title={ele.name} description="www.instagram.com" />
+                                        <Card.Meta title={ele.name} description={`created by ${ele.name}`} />
                                     </Card>
                                 </a>
                             </Col>

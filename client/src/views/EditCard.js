@@ -12,7 +12,7 @@ const EditCard = () => {
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                 <Col span={18}>
                     <CardAndOwnerName />
-                    {/* <EditEffect /> */}
+                    <EditEffect />
                 </Col>
                 <Col span={6}>
                     <CardImageWithSaveCancel />

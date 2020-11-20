@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from faker import Faker
 
-from cardashian_app.models import User, CardImage, Game, CardCategory, Card, CardComment
+from cardashian_app.models import User, CardImage, Game, CardCategory, Card, CardComment, Friend, ProfileComment
 from cardashian_app import app, db, sess
 from cardashian_app.extensions import guard
 from datetime import date
@@ -36,19 +36,20 @@ with app.app_context():
                   country="TX", hashed_password=guard.hash_password('password'), promotion_points=600)
     demo = User(username='demo', email='demo@example.com', city='New York',profile_pic_src=true_faker.image_url(),background_src=true_faker.image_url(),
                 country="NY", hashed_password=guard.hash_password('password'), promotion_points=745)
-    db.session.add_all([guest, ian, javier, dean, angela, soonmi, alissa, demo])
-    db.session.commit()
+    default_users = [guest, ian, javier, dean, angela, soonmi, alissa, demo]
+    db.session.add_all(default_users)
+    # db.session.commit()
 
     game_iterable = 1
     while game_iterable <= 8:
-        db.session.add(Game(user_id=game_iterable,name=fake_en.company(), description=true_faker.paragraph(nb_sentences=2), home_bg_src=true_faker.image_url(), game_logo_src=true_faker.image_url()))
-        db.session.commit()
+        new_game = Game(user_id=game_iterable, name=fake_en.company(), description=true_faker.paragraph(nb_sentences=2), home_bg_src=true_faker.image_url(), game_logo_src=true_faker.image_url(), users=default_users[game_iterable-1])
+        # db.session.commit()
         db.session.add(CardCategory(game_id=game_iterable, list_order=1))
         game_iterable += 1
-        db.session.commit()
+    db.session.commit()
 
 
-    for fake_game in range(50):
+    for fake_game in range(16):
         rand_num = random.randint(1, 8)
         new_fake_game = Game(user_id=rand_num, name=fake_en.company(), home_bg_src=true_faker.image_url(), description=true_faker.paragraph(nb_sentences=4), game_logo_src=true_faker.image_url())
         db.session.add(new_fake_game)
@@ -57,13 +58,13 @@ with app.app_context():
         db.session.add(new_fake_category)
         db.session.commit()
 
-    unique_fake_names_en = [fake_en.unique.name() for i in range(30)]
-    unique_fake_names_it = [fake_it.unique.name() for i in range(30)]
-    unique_fake_names_pt = [fake_pt.unique.name() for i in range(30)]
-    unique_fake_names_jp = [fake_jp.unique.name() for i in range(30)]
-    unique_fake_names_ta = [fake_ta.unique.name() for i in range(30)]
+    unique_fake_names_en = [fake_en.unique.name() for i in range(20)]
+    unique_fake_names_it = [fake_it.unique.name() for i in range(20)]
+    unique_fake_names_pt = [fake_pt.unique.name() for i in range(20)]
+    unique_fake_names_jp = [fake_jp.unique.name() for i in range(20)]
+    unique_fake_names_ta = [fake_ta.unique.name() for i in range(20)]
     faker_names_list = [unique_fake_names_en, unique_fake_names_it, unique_fake_names_pt, unique_fake_names_jp, unique_fake_names_ta]
-    for i in range(20):
+    for i in range(6):
         random_faker_language_int = random.randint(0, 4)
         for fake_name in faker_names_list[random_faker_language_int]:
             new_fake_card =Card(game_id=i+1, name=fake_name, artist=fake_en.name(), description_title=fake_en.color_name(), manual_description=true_faker.paragraph(nb_sentences=2), card_image_src=true_faker.image_url())
@@ -71,6 +72,12 @@ with app.app_context():
             db.session.commit()
             for k in range(5):
                 db.session.add(CardComment(user_id=random.randint(1, 8), card_id=new_fake_card.id, message=true_faker.paragraph(nb_sentences=2)))
+    for i in range(1,9):
+        for k in range(1, 9):
+            new_comment = ProfileComment(message=true_faker.paragraph(nb_sentences=5), user_id=random.randint(1, 8), profile_id=random.randint(1, 8) )
+            db.session.add(Friend(user_id=i, friend_id=k))
+            db.session.add(new_comment)
+            db.session.commit()
 
     default_card_image = CardImage(game_id=1, name='default', category='card', src='https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg')
     db.session.add(default_card_image)

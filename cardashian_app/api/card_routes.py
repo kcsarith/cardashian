@@ -45,27 +45,30 @@ def get_all_cards_by_user(user_id):
     games = Game.query.filter(Game.user_id == user_id)
     cards = []
     for game in games:
-        cards_in_game = list(Card.query.filter(Card.game_id == game.id))
+        game_dict = game.as_dict()
+        cards_in_game = Card.query.filter(Card.game_id == game.id)
         for card_in_game in cards_in_game:
-            cards.append(card_in_game)
+            card_in_game_dict = card_in_game.as_dict()
+            card_in_game_dict.update(game=game_dict)
+            cards.append(card_in_game_dict)
 
     print('8' * 100)
     print(cards)
     print('8'*100)
     # return {}
-    return {"cards": [card.as_dict() for card in cards]}
+    return {"cards": cards}
 
 
 @bp.route('/<username>/<gamename>/<cardname>', methods=['GET','PATCH','DELETE'])
 def patch_delete_card_to_game(gamename, cardname, username):
     user = User.query.filter(User.username == username).first()
-    game = Game.query.filter(Game.user_id == user.id).first()
-    card_filt = Card.query.filter(Card.game_id == game.id)
-    card = card_filt.first()
+    game = Game.query.filter(Game.user_id == user.id).filter(Game.name== gamename).first()
+    card_filt = Card.query.filter(Card.game_id == game.id).filter(Card.name==cardname)
     if request.method == 'GET':
+        card = card_filt.first()
         print('8'*100)
         print(card)
-        return {'card': card.as_dict(), 'user': user.to_dict(), 'game':game.to_dict()}
+        return {'card': card.as_dict(), 'user': user.as_dict(), 'game':game.as_dict()}
     if request.method == 'DELETE':
         card_filt.delete()
         return {'response': deleted_card}

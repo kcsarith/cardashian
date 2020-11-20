@@ -295,7 +295,10 @@ const Signup = () => {
                                         listType="picture-card"
                                         className="avatar-uploader"
                                         showUploadList={false}
-                                        action={`/api/aws/users/${formInputState.username}/profiles`}
+                                        action={`/api/aws/users/${formInputState.username}/profiles`, {
+                                            method: 'GET',
+                                            credentials: 'include'
+                                        }}
                                         beforeUpload={beforeUploadProfile}
                                         onChange={handleChangeProfilePic}
                                     >
@@ -316,7 +319,10 @@ const Signup = () => {
                                         name="file"
                                         listType="picture"
                                         showUploadList={false}
-                                        action={`/api/aws/users/${formInputState.username}/backgrounds`}
+                                        action={`/api/aws/users/${formInputState.username}/backgrounds`, {
+                                            method: 'GET',
+                                            credentials: 'include'
+                                        }}
                                         beforeUpload={beforeUploadBackground}
                                         onChange={handleChangeBackgroundPic}
                                     >

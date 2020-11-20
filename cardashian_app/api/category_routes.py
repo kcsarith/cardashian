@@ -12,7 +12,7 @@ def get_all_categories():
     print('8' * 100)
     print(response)
     print('8'*100)
-    return {"categories": [category.to_dict() for category in response]}
+    return {"categories": [category.as_dict() for category in response]}
 
 @bp.route('/game/<int:game_id>', methods=['GET','POST', 'DELETE'])
 def crd_category_to_game(game_id):
@@ -22,7 +22,7 @@ def crd_category_to_game(game_id):
         print(categories)
         print('8'*100)
         # return {}
-        return {"categories": [category.to_dict() for category in categories]}
+        return {"categories": [category.as_dict() for category in categories]}
     if request.method == 'POST':
         categories = CardCategory.query.filter(CardCategory.game_id == game_id)
         new_list_order = len(list(categories))+1
@@ -32,7 +32,7 @@ def crd_category_to_game(game_id):
         )
         db.session.add(new_category)
         db.session.commit()
-        return {"category": new_category.to_dict()}
+        return {"category": new_category.as_dict()}
 
     if request.method == 'DELETE':
         deleted_category = CardCategory.query.filter(CardCategory.game_id == game_id).delete()
@@ -42,7 +42,7 @@ def crd_category_to_game(game_id):
 def patch_category(category_id):
     if request.method == 'GET':
         category = CardCategory.query.get_or_404(category_id)
-        return {'category': category.to_dict()}
+        return {'category': category.as_dict()}
 
     if request.method == 'DELETE':
         filtered = CardCategory.query.filter(CardCategory.id == category_id)
@@ -57,7 +57,7 @@ def patch_category(category_id):
         print(category.name *50)
         # amount_deleted = deleted_category.delete()
         # return {'response': f'deleted {amount_deleted} category(s)'}
-        return {'this': category.to_dict()}
+        return {'this': category.as_dict()}
 
     if request.method == 'PATCH':
         category = CardCategory.query.get_or_404(category_id)
@@ -77,4 +77,4 @@ def patch_category(category_id):
             category.frame_color = new_frame_color
 
         db.session.commit()
-        return {"category": category.to_dict()}
+        return {"category": category.as_dict()}

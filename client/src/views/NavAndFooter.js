@@ -11,30 +11,10 @@ const { Header, Content } = Layout;
 const logout = () => {
     Cookies.remove("XSRF_TOKEN")
 }
-const menu = (
-    <Menu>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="/settings">
-                Profile
-      </a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer">
-                Settings
-      </a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" onClick={logout} href="/">
-                Logout
-      </a>
-        </Menu.Item>
-    </Menu>
-);
-
 
 const { Title } = Typography;
 const NavAndFooter = (props) => {
-    const { userInfo } = useContext(UserContext);
+    const { userInfo, login } = useContext(UserContext);
     const history = useHistory();
     const navigationLocation = useLocation();
     console.log(navigationLocation.pathname)
@@ -57,6 +37,26 @@ const NavAndFooter = (props) => {
 
         }
     }
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <a href={`/${userInfo.username}`}>
+                    Profile
+      </a>
+            </Menu.Item>
+            <Menu.Item>
+                <a rel="noopener noreferrer" href="/settings">
+                    Settings
+      </a>
+            </Menu.Item>
+            <Menu.Item>
+                <a onClick={logout} href="/">
+                    Logout
+      </a>
+            </Menu.Item>
+        </Menu>
+    );
+
 
     return (
         <>
@@ -65,8 +65,8 @@ const NavAndFooter = (props) => {
                     <a><Title style={{ color: 'white' }} level={3} onClick={handleMenuClick}>CARDASHIAN</Title></a>
                     <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[navigationLocation.pathname.split('/')[1]]} onClick={handleMenuClick}>
                         <Menu.Item key="home">Home</Menu.Item>
-                        <Menu.Item key="games">Games</Menu.Item>
-                        <Menu.Item key="cards">Cards</Menu.Item>
+                        <Menu.Item key="games">Card Create</Menu.Item>
+                        <Menu.Item key="cards">Play Game</Menu.Item>
                         <Menu.Item key="about">About</Menu.Item>
                     </Menu>
                     {userInfo.username ? <><p style={{ color: 'white' }}>Hello {userInfo.username}</p>
@@ -76,12 +76,18 @@ const NavAndFooter = (props) => {
                                 <Avatar style={{ float: 'right' }} src={userInfo.profile_pic_src} />
                             </Dropdown>
                             :
-
-                            <Avatar size={40}>{userInfo.username[0]}{userInfo.username[1]}</Avatar>}
+                            <Dropdown overlay={menu} placement="bottomLeft" arrow>
+                                <Avatar size={40}>{userInfo.username[0]}{userInfo.username[1]}</Avatar>
+                            </Dropdown>
+                        }
                     </>
                         :
                         <div>
-                            <Button primary href='/signup'>Signup</Button>
+
+                            <Button primary onClick={() => history.push('/card-edit/visuals')}>EDIT CARD</Button>
+                            <Button primary onClick={() => history.push('/test-card')}>TEST CARD GAME</Button>
+                            <Button primary onClick={() => history.push('/signup')}>Signup</Button>
+                            <Button primary onClick={() => login('demo', 'password')}>Demo User</Button>
                             <LoginModal buttonText='Login' />
                         </div>
                     }
@@ -90,7 +96,9 @@ const NavAndFooter = (props) => {
                     {/* <Layout>
                         <HomepageSider />
                         <Content> */}
-                    {props.children}
+                    <div style={{ backgroundImage: 'url(https://thumbs.gfycat.com/AdmiredDigitalHarrier-size_restricted.gif)', backgroundAttachment: 'fixed' }}>
+                        {props.children}
+                    </div>
                     {/* </Content>
                     </Layout> */}
                 </Content>

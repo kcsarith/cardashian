@@ -28,12 +28,11 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True, server_default="true")
 
-    games = db.relationship("Game", backref="user", lazy="select", uselist=False)
-    card_favorites = db.relationship("CardFavorite", backref="user", lazy="select", uselist=False)
-    decks = db.relationship("Deck", backref="user", lazy="select")
-    card_comments = db.relationship("CardComment", backref="user", lazy="select", uselist=False)
-    user_tags = db.relationship("UserTag", backref="user", lazy="select", uselist=False)
-
+    games = db.relationship("Game", backref=db.backref("users", lazy=True) )
+    card_favorites = db.relationship("CardFavorite", backref="user", lazy=True, )
+    decks = db.relationship("Deck", backref="user", lazy=True)
+    card_comments = db.relationship("CardComment", backref="user", lazy=True, )
+    user_tags = db.relationship("UserTag", backref="user", lazy=True, )
     # games = relationship("Game", back_populates="user")
     # card_favorites = relationship("CardFavorite", back_populates="user")
     # decks = relationship("Deck", back_populates="user")
@@ -79,8 +78,9 @@ class User(db.Model, UserMixin):
     # def check_password(self, password):
     #     return check_password_hash(self.password, password)
 
-    def to_dict(self):
-        return {
+
+    def as_dict(self):
+       return {
           "id": self.id,
           "roles": self.roles,
           "is_public": self.is_public,
@@ -94,31 +94,12 @@ class User(db.Model, UserMixin):
           "about_me": self.about_me,
           "profile_pic_src": self.profile_pic_src,
           "background_src": self.background_src,
-        #   "hashed_password": self.hashed_password,
           "created_at": self.created_at,
           "updated_at": self.updated_at,
           "is_active": self.is_active
         }
     def to_dict_show_hashed(self):
-        return {
-          "id": self.id,
-          "roles": self.roles,
-          "is_public": self.is_public,
-          "promotion_points": self.promotion_points,
-          "online_status": self.online_status,
-          "alias": self.alias,
-          "username": self.username,
-          "email": self.email,
-          "country": self.country,
-          "city": self.city,
-          "about_me": self.about_me,
-          "profile_pic_src": self.profile_pic_src,
-          "background_src": self.background_src,
-          "hashed_password": self.hashed_password,
-          "created_at": self.created_at,
-          "updated_at": self.updated_at,
-          "is_active": self.is_active
-        }
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Game(db.Model):
@@ -150,10 +131,10 @@ class Game(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 
-    cards= db.relationship("Card", backref="game", lazy="select", uselist=False)
-    card_categories= db.relationship("CardCategory", backref="game", lazy="select", uselist=False)
-    card_images= db.relationship("CardImage", backref="game", lazy="select", uselist=False)
-    game_tags = db.relationship("GameTag", backref="game", lazy="select", uselist=False)
+    cards= db.relationship("Card", backref="game", lazy=True, )
+    card_categories= db.relationship("CardCategory", backref="game", lazy=True, )
+    card_images= db.relationship("CardImage", backref="game", lazy=True, )
+    game_tags = db.relationship("GameTag", backref="game", lazy=True, )
 
     # cards= relationship("Card", back_populates="game")
     # card_categories= relationship("CardCategory", back_populates="game")
@@ -162,32 +143,10 @@ class Game(db.Model):
 
     # user= relationship("User", back_populates="games")
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'is_public': self.is_public,
-            'user_id' : self.user_id,
-            'promotion_points': self.promotion_points,
-            'name' : self.name,
-            'description' : self.description,
-            'home_bg_src' : self.home_bg_src,
-            'game_logo_src' : self.game_logo_src,
-            'player_health_term' : self.player_health_term,
-            'player_currency_term' : self.player_currency_term,
-            'character_card_term' : self.character_card_term,
-            'spell_card_term': self.spell_card_term,
-            'rank_term' : self.rank_term,
-            'rank_type': self.rank_type,
-            'rank_icon_src' : self.rank_icon_src,
-            'hp_term' : self.hp_term,
-            'atk_term' : self.atk_term,
-            'def_term' : self.def_term,
-            'special_card_term' : self.special_card_term,
-            'use_atk' : self.use_atk,
-            'use_def' : self.use_def,
-            'created_at' : self.created_at,
-            'updated_at' : self.updated_at
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 class Card(db.Model):
     # __tablename__ = 'cards'
     __table_args__ = (db.UniqueConstraint('game_id', 'name'), {'extend_existing': True})
@@ -216,11 +175,11 @@ class Card(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    card_favorites = db.relationship("CardFavorite", backref="card", uselist=False)
-    decks = db.relationship("Deck", backref="card", uselist=False)
-    card_effects = db.relationship("CardEffect", backref="card", uselist=False)
-    card_comments = db.relationship("CardComment", backref="card", uselist=False)
-    card_tags = db.relationship("CardTag", backref="card", uselist=False)
+    card_favorites = db.relationship("CardFavorite", backref="card", )
+    decks = db.relationship("Deck", backref="card", )
+    card_effects = db.relationship("CardEffect", backref="card", )
+    card_comments = db.relationship("CardComment", backref="card", )
+    card_tags = db.relationship("CardTag", backref="card", )
 
     # card_favorites = relationship("CardFavorite", back_populates="card")
     # decks = relationship("Deck", back_populates="card")
@@ -245,14 +204,9 @@ class CardFavorite(db.Model):
 
     # user = relationship("User", back_populates="card_favorites")
     # card = relationship("Card", back_populates="card_favorites")
-    def to_dict(self):
-        return {
-            'id' : self.id,
-            'card_id' : self.card_id,
-            'user_id' : self.user_id,
-            'folder'  : self.folder,
-            'date_added' : self.date_added
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class Deck(db.Model):
     # __tablename__ = 'decks'
@@ -266,15 +220,9 @@ class Deck(db.Model):
 
     # user= relationship("User", back_populates="decks")
     # card = relationship("Card", back_populates="decks")
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'card_id': self.card_id,
-            'user_id': self.user_id,
-            'name' : self.name,
-            'created_at' : self.created_at,
-            'updated_at' : self.updated_at,
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class CardCategory(db.Model):
     # __tablename__ = 'card_categories'
@@ -291,15 +239,9 @@ class CardCategory(db.Model):
     # cards = relationship("Card", back_populates="card_category")
 
     # game = relationship("Game", back_populates="card_categories")
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'game_id': self.game_id,
-            'id_prefix' : self.id_prefix,
-            'list_order' : self.list_order,
-            'name': self.name,
-            'frame_color' : self.frame_color,
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class CardImage(db.Model):
     # __tablename__ = 'card_images'
@@ -311,14 +253,9 @@ class CardImage(db.Model):
     category = db.Column(db.String(31), default='none', nullable=False)
 
     # game = relationship("Game", back_populates="card_images")
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'game_id': self.game_id,
-            'src' : self.src,
-            'name' : self.name,
-            'category' : self.category,
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class CardEffect(db.Model):
     # __tablename__ = 'card_effect_pieces'
@@ -341,24 +278,9 @@ class CardEffect(db.Model):
     turns = db.Column(db.Integer, default=0)
 
     # card = relationship("Card", back_populates="card_effects")
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'card_id': self.card_id,
-            'list_order': self.list_order,
-            'player_condition_target' : self.player_condition_target,
-            'player_condition' : self.player_condition,
-            'player_condition_operator': self.player_condition_operator,
-            'player_condition_value' : self.player_condition_value,
-            'card_condition_target' : self.card_condition_target,
-            'card_condition' : self.card_condition,
-            'card_condition_operator' : self.card_condition_operator,
-            'card_condition_value' : self.card_condition_value,
-            'effect' : self.effect,
-            'target' : self.target,
-            'value' : self.value,
-            'turns' : self.turns,
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class CardComment(db.Model):
     # __tablename__ = 'card_comments'
@@ -374,16 +296,26 @@ class CardComment(db.Model):
 
     # user = relationship("User", back_populates="card_comments")
     # card = relationship("Card", back_populates="card_comments")
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'card_id' : self.card_id,
-            'user_id' : self.user_id,
-            'parent_comment_id': self.parent_comment_id,
-            'message' : self.message,
-            'created_at' : self.created_at,
-            'updated_at' : self.updated_at
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class ProfileComment(db.Model):
+    # __tablename__ = 'card_comments'
+    __table_args__ = {'extend_existing': True}
+
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.Text, default='')
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    # user = relationship("User", back_populates="card_comments")
+    # card = relationship("Card", back_populates="card_comments")
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class UserTag(db.Model):
@@ -410,12 +342,9 @@ class CardTag(db.Model):
     name = db.Column(db.String(15), default='no tag', nullable=False)
 
     # card = relationship("Card", back_populates="card_tags")
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'card_id': self.card_id,
-            'name': self.name
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class GameTag(db.Model):
     # __tablename__ = 'game_tags'
@@ -426,9 +355,15 @@ class GameTag(db.Model):
 
 
     # game = relationship("Game", back_populates="game_tags")
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'game_id': self.game_id,
-            'name': self.name
-        }
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class Friend(db.Model):
+    # __table_args__ = (db.UniqueConstraint('user_id, friend_id'),)
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def as_dict(self):
+       return {'id': self.id, 'user_id': self.user_id, 'friend_id': self.friend_id}

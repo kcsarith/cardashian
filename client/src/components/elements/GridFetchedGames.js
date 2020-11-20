@@ -13,7 +13,7 @@ const GridFetchedGames = (props) => {
                             hoverable
                             cover={<img alt="example" src={ele.home_bg_src || placeholderImage} />}
                         >
-                            <Card.Meta title={ele.description} description="www.instagram.com" />
+                            <Card.Meta title={ele.description} description={`created by ${ele.name}`} />
                         </Card>,
                     </Col>)}
             </Row>

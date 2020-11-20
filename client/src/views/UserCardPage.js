@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Layout, Typography, Row, Col } from 'antd';
+import { Layout, Typography, Row, Col, Descriptions } from 'antd';
 
 import Gallery from 'react-grid-gallery';
 
@@ -35,7 +35,10 @@ const UserCardPage = () => {
     const { username, gamename, cardname } = useParams();
     useEffect(() => {
         async function fetchGames() {
-            const res = await fetch(`/api/cards/${username}/${gamename}/${cardname}`)
+            const res = await fetch(`/api/cards/${username}/${gamename}/${cardname}`, {
+                method: 'GET',
+                credentials: 'include'
+            })
             if (res) {
                 const { card, user, game } = await res.json()
                 console.log(card)
@@ -68,8 +71,25 @@ const UserCardPage = () => {
                         <div style={{ backgroundColor: '#CCC' }}>
                             <ImageGallery items={cardPageState.images} showThumbnails={false} showFullscreenButton={false} showPlayButton={false} showBullets={false} slideDuration={400} slideInterval={1000} onSlide={handleSlide} />
                         </div>
-                        {cardPageState.user &&
+                        {cardPageState.user && <>
                             <UserCardHeader user={cardPageState.user} card={cardPageState.card} game={cardPageState.game} />
+                            <Descriptions layout="vertical" bordered>
+                                <Descriptions.Item label="Rank">{cardPageState.card.rank}</Descriptions.Item>
+                                <Descriptions.Item label="Is Spell">{cardPageState.card.is_spell}</Descriptions.Item>
+                                <Descriptions.Item label="Is Special">{cardPageState.card.is_special}</Descriptions.Item>
+                                <Descriptions.Item label="Is Charge">{cardPageState.card.is_charge}</Descriptions.Item>
+                                <Descriptions.Item label="Game Id">{cardPageState.card.game_id}</Descriptions.Item>
+                                <Descriptions.Item label="Category">{cardPageState.card.category_id}</Descriptions.Item>
+                                <Descriptions.Item label="Artist">{cardPageState.card.artist}</Descriptions.Item>
+                                <Descriptions.Item label="Ability Title">{cardPageState.card.description_title}</Descriptions.Item>
+                                <Descriptions.Item label="Health">{cardPageState.card.health}</Descriptions.Item>
+                                <Descriptions.Item label="Attack">{cardPageState.card.attack}</Descriptions.Item>
+                                <Descriptions.Item label="Defense">{cardPageState.card.defense}</Descriptions.Item>
+                                <Descriptions.Item label="Cost">{cardPageState.card.cost}</Descriptions.Item>
+                                <Descriptions.Item label="Turns">{cardPageState.card.turns}</Descriptions.Item>
+                                <Descriptions.Item label="Longevity">{cardPageState.card.longevity}</Descriptions.Item>
+                            </Descriptions>
+                        </>
                         }
                         {(cardPageState.user && cardPageState.card && cardPageState.game) &&
                             < CardComments user={cardPageState.user} card={cardPageState.card} game={cardPageState.game} />}

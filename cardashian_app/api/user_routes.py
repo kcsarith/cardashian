@@ -8,14 +8,13 @@ bp = Blueprint('users', __name__)
 
 @bp.route('/<username>')
 def get_by_username(username):
-    user = User.query.filter_by(username=username).first()
-    return ({'user': user.to_dict()})
+    user = User.query.filter_by(username=username).options(joinedload('games')).first()
+    return ({'user': user.as_dict()})
 
-# @bp.route('/')
-# @login_required
-# def index():
-#     response = User.query.all()
-#     return {"users": [user.to_dict() for user in response]}
+@bp.route('/')
+def index():
+    response = User.query.all()
+    return {"users": [user.as_dict() for user in response]}
 
 
 # @bp.route("/<int:user_id>/favorites", methods=["GET", "POST", "DELETE"])
@@ -36,7 +35,7 @@ def get_by_username(username):
 #                       Restaurant.name).options(
 #                       joinedload(Restaurant.users)
 #                       ).filter(Restaurant.users.any(id=user_id)).all()
-#         return {'favorites': [rest.to_dict() for rest in response]}
+#         return {'favorites': [rest.as_dict() for rest in response]}
 
 # @bp.route("/<int:user_id>/favorites/delete/<int:rest_id>", methods=["DELETE"])
 # @login_required

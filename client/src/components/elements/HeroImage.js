@@ -27,7 +27,7 @@ const HeroImageWrapper = styled.div`
 	display: flex;
 	position: relative;
 	text-align: center;
-	width: 100vw;
+	// width: 100vw;
 	height: ${props => props.height};
 	/* Determine parallax behavior based on our 'parallax' prop */
 	background-attachment: ${props =>
@@ -45,10 +45,6 @@ const HeroImageWrapper = styled.div`
                 return 'center';
         }
     }};
-	/*
-		We stitch together our background-image property by generating a gradient (util function)
-		and getting the 'imageSrc' prop value
-	*/
 	background-image: ${props =>
         generateBgGradient(
             props.gradientDirection,

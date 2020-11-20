@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Comment, Avatar, Input, Form, Button, Divider } from 'antd';
 import { UserContext } from '../../Context'
-const CardComments = ({ children, user, card, game }) => {
-    console.log(` Comment Params ${user} ${card} ${game}`)
+const ProfileComments = ({ children, user }) => {
     const { fetchWithCSRF, userInfo } = useContext(UserContext);
     const [commentsPageState, setCommentsPageState] = useState({ comments: [] })
     const [commentMessage, setCommentMessage] = useState('')
     useEffect(() => {
         async function fetchComments() {
-            const res = await fetch(`/api/card-comments/${user.username}/${game.name}/${card.name}`, {
-                method: 'GET',
+            const res = await fetch(`/api/profile-comments/profile/${user.username}`, {
                 credentials: 'include'
             })
             if (res) {
-                const { card, user, game, comments } = await res.json()
-                await setCommentsPageState({ ...commentsPageState, card, user, game, comments })
+                const { comments } = await res.json()
+                await setCommentsPageState({ ...commentsPageState, user, comments })
             } else {
                 await setCommentsPageState({ ...commentsPageState })
             }
@@ -26,8 +24,7 @@ const CardComments = ({ children, user, card, game }) => {
     }
     const onCommentSubmit = async (e) => {
         console.log(commentMessage);
-        console.log(`${user.username}/${game.name}/${card.name}`)
-        const res = await fetchWithCSRF(`/api/card-comments/${user.username}/${game.name}/${card.name}`, {
+        const res = await fetchWithCSRF(`/api/profile-comments/profile/${user.username}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -55,7 +52,6 @@ const CardComments = ({ children, user, card, game }) => {
 
         console.log(commentID)
         console.log(commentIndex)
-        console.log(`${user.username}/${game.name}/${card.name}`)
         const res = await fetchWithCSRF(`/api/card-comments/${commentID}`, {
             method: "DELETE",
             headers: {
@@ -78,20 +74,20 @@ const CardComments = ({ children, user, card, game }) => {
             commentsPageState.comments.map((ele, index) => {
                 return (
                     <>
-                        <Divider />
+                        {/* <Divider /> */}
                         <Comment
                             // actions={[<span key="comment-nested-reply-to">Reply to</span>]}
                             key={index}
-                            author={ele.User && <a href={`/${ele.User.username}`}>{ele.User.username}</a>}
+                            author={<a style={{ color: 'white' }} href={`/${ele.User.username}`}>{ele.User.username}</a>}
                             avatar={
                                 <Avatar
-                                    src={ele.User && ele.User.profile_pic_src}
-                                    alt={ele.User && ele.User.username}
+                                    src={ele.User.profile_pic_src}
+                                    alt={ele.User.username}
                                 />
                             }
-                            style={{ padding: '2em', backgroundColor: 'white' }}
+                            style={{ padding: '2em', backgroundColor: '#222' }}
                             content={<>
-                                <p style={{ padding: '2em' }}>
+                                <p style={{ padding: '2em', color: 'white' }}>
                                     {ele.message}
                                 </p>
                                 <button primary size='small' id={`card-comment-${ele.id}_index-${index}`} onClick={onDeleteComment}>Delete</button>
@@ -101,7 +97,7 @@ const CardComments = ({ children, user, card, game }) => {
                         >
                             {children}
                         </Comment>
-                        <Divider />
+                        {/* <Divider /> */}
                     </>
                 )
             })
@@ -118,4 +114,4 @@ const CardComments = ({ children, user, card, game }) => {
     </>
     );
 }
-export default CardComments;
+export default ProfileComments;

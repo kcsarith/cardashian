@@ -15,16 +15,16 @@ def search():
                     Restaurant.city, Restaurant.state]]
     restaurants = Restaurant.query.filter(or_(*search_args)).order_by(
                     Restaurant.avg_rating.desc()).all()
-    return {'restaurants': [rest.to_dict() for rest in restaurants]}
+    return {'restaurants': [rest.as_dict() for rest in restaurants]}
 
 
 @login_required
 @bp.route('/<int:id>')
 def index(id):
     response = User.query.get(id)
-    user_rest = response.to_dict()
+    user_rest = response.as_dict()
     rest_list = Restaurant.query.filter_by(city=user_rest['city']).all()
-    return {'restaurants': [rest.to_dict() for rest in rest_list]}
+    return {'restaurants': [rest.as_dict() for rest in rest_list]}
 
 
 @login_required
@@ -45,7 +45,7 @@ def reviews(rest_id):
         db.session.add(new_review)
         db.session.commit()
     response = Review.query.filter_by(restaurant_id=rest_id).all()
-    return {'reviews': [review.to_dict() for review in response]}
+    return {'reviews': [review.as_dict() for review in response]}
 
 @login_required
 @bp.route('/restaurant/<int:rest_id>/patch-review', methods=["GET", "PATCH"])
@@ -59,14 +59,14 @@ def patch_review(rest_id):
     review.content = new_content
     review.rating = new_rating
     db.session.commit()
-    return {'review': review.to_dict()}
+    return {'review': review.as_dict()}
 
 @login_required
 @bp.route('/restaurant/profile/<int:rest_id>')
 def profile(rest_id):
 
     response = Restaurant.query.filter_by(id=rest_id).first()
-    return {'restaurant': response.to_dict()}
+    return {'restaurant': response.as_dict()}
 
 
 @login_required
@@ -82,7 +82,7 @@ def reserveRes():
                              group_num=group_num, start_time=start_time)
     db.session.add(newReserve)
     db.session.commit()
-    return {'reservation': newReserve.to_dict()}, 200
+    return {'reservation': newReserve.as_dict()}, 200
 
 
 @bp.route('/restaurant/reservationlist/<int:user_id>')
@@ -91,7 +91,7 @@ def reservationlist(user_id):
     response = db.session.query(Reservation) \
                       .options(joinedload(Reservation.restaurant)) \
                       .filter(Reservation.user_id == user_id)
-    return {'reservation': [reservation.to_dict() for reservation in response]}
+    return {'reservation': [reservation.as_dict() for reservation in response]}
 
 
 @bp.route('/restaurant/review/<int:restaurant_id>')
@@ -100,7 +100,7 @@ def reviewlist(restaurant_id):
     response = db.session.query(Review) \
                       .options(joinedload(Review.user)) \
                       .filter(Review.restaurant_id == restaurant_id)
-    return {'reservation': [reservation.to_dict() for reservation in response]}
+    return {'reservation': [reservation.as_dict() for reservation in response]}
 
 
 @login_required
@@ -122,7 +122,7 @@ def earnpoint(user_id):
     if user:
         user.points = User.points + set_point
         db.session.commit()
-        return {"user": user.to_dict()}, 200
+        return {"user": user.as_dict()}, 200
     return {}, 404
 
 
@@ -131,4 +131,4 @@ def earnpoint(user_id):
 def rev(rev_id):
 
     response = User.query.filter_by(id=rev_id).first()
-    return {'user': response.to_dict()}
+    return {'user': response.as_dict()}

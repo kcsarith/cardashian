@@ -13,7 +13,7 @@ def load_user():
     extracted_data = guard.extract_jwt_token(XSRF_TOKEN)
     try:
         user = User.query.get_or_404(extracted_data['id'])
-        return {'user': user.to_dict()}
+        return {'user': user.as_dict()}
     except:
         return {'message': 'Cannot get user based on Token'}
 
@@ -28,7 +28,7 @@ def login():
     password = json_data['password']
     user = guard.authenticate(username, password)
 
-    return jsonify({'access_token': guard.encode_jwt_token(user), 'user': user.to_dict()},200)
+    return jsonify({'access_token': guard.encode_jwt_token(user), 'user': user.as_dict()},200)
 
 @bp.route('/refresh')
 def refresh():
@@ -76,7 +76,7 @@ def register():
     db.session.commit()
 
     user = guard.authenticate(new_user.username, user['password'])
-    return jsonify({'user': new_user.to_dict(),'access_token': guard.encode_jwt_token(user)},200)
+    return jsonify({'user': new_user.as_dict(),'access_token': guard.encode_jwt_token(user)},200)
 
 @bp.route('/finalize')
 def finalize():
