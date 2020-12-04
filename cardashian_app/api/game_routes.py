@@ -19,7 +19,7 @@ def get_all_high_promoted_games():
         i+=1
     return {"games": [game for game in list_games]}
 
-@bp.route('/')
+@bp.route('/all')
 def get_all_games():
     response = Game.query.order_by(Game.promotion_points.desc())
     users = User.query.all()

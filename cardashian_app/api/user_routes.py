@@ -11,7 +11,7 @@ def get_by_username(username):
     user = User.query.filter_by(username=username).options(joinedload('games')).first()
     return ({'user': user.as_dict()})
 
-@bp.route('/')
+@bp.route('/all')
 def index():
     response = User.query.all()
     return {"users": [user.as_dict() for user in response]}

@@ -8,9 +8,9 @@ bp = Blueprint('profile-comments', __name__)
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
 def get_comments_from_profile( username):
-    user = User.query.filter(User.username == username).first()
+    profile_user = User.query.filter(User.username == username).first()
     if request.method == 'GET':
-        comments = ProfileComment.query.filter(ProfileComment.profile_id == user.id).limit(3)
+        comments = ProfileComment.query.filter(ProfileComment.profile_id == profile_user.id).limit(10)
         result_comments = []
         for comment in comments:
             dict_comment = comment.as_dict()
@@ -22,8 +22,12 @@ def get_comments_from_profile( username):
     if request.method == 'POST':
         message = request.json.get("message")
         user_id = request.json.get("user_id")
-        new_comment = ProfileComment(message=message, profile_id=user.id, user_id=user_id)
+        dict_profile_user = profile_user.as_dict()
+        new_comment = ProfileComment(message=message, profile_id=profile_user.profile_id, user_id=user_id)
+        print('8' * 30)
+        print(user.as_dict())
         db.session.add(new_comment)
+        db.session.commit()
         return {'comment': new_comment.as_dict()}
 
 @bp.route('/')

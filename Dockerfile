@@ -25,7 +25,7 @@ RUN ["cp", "-r", "cardashian_app/static/static/css", "cardashian_app/static"]
 ENV FLASK_APP=cardashian_app
 ENV FLASK_ENV=production
 ENV SQLALCHEMY_ECHO=True
-ENV REACT_APP_BASE_URL=http://cardashian.herokuapp.com/
+ENV REACT_APP_BASE_URL=https://cardashian.herokuapp.com/
 
 EXPOSE 8000
 

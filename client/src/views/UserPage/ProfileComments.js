@@ -36,8 +36,10 @@ const ProfileComments = ({ children, user }) => {
         if (res.ok) {
             const { comment } = await res.json();
             let copiedComments = { ...commentsPageState }
+            comment.User = { username: userInfo.username, profile_pic_src: user.profile_pic_src }
             copiedComments.comments.push(comment)
             await setCommentsPageState(copiedComments);
+            alert(comment)
             setCommentMessage('')
             return comment;
         }
@@ -52,7 +54,7 @@ const ProfileComments = ({ children, user }) => {
 
         console.log(commentID)
         console.log(commentIndex)
-        const res = await fetchWithCSRF(`/api/card-comments/${commentID}`, {
+        const res = await fetchWithCSRF(`/api/profile-comments/${commentID}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -78,11 +80,11 @@ const ProfileComments = ({ children, user }) => {
                         <Comment
                             // actions={[<span key="comment-nested-reply-to">Reply to</span>]}
                             key={index}
-                            author={<a style={{ color: 'white' }} href={`/${ele.User.username}`}>{ele.User.username}</a>}
+                            author={ele.User && <a style={{ color: 'white' }} href={`/${ele.User.username}`}>{ele.User.username}</a>}
                             avatar={
                                 <Avatar
-                                    src={ele.User.profile_pic_src}
-                                    alt={ele.User.username}
+                                    src={ele.User && ele.User.profile_pic_src}
+                                    alt={ele.User && ele.User.username}
                                 />
                             }
                             style={{ padding: '2em', backgroundColor: '#222' }}

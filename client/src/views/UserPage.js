@@ -209,7 +209,7 @@ const UserPage = () => {
                             {!userInfo.username && <LoginModal style={{ margin: '2em' }} buttonText='Login to Follow' />}
                         </Col>
                         <Col span={16} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                            <UserPageHeader user={userInfo} />
+                            <UserPageHeader user={profilePageState.user} />
                         </Col>
                     </Row>
                 </HeroImage>

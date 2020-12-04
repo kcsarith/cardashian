@@ -10,7 +10,7 @@ const CardsPage = (props) => {
 
     useEffect(() => {
         async function fetchGames() {
-            const res = await fetch(`/api/cards`, {
+            const res = await fetch(`/api/cards/all`, {
                 method: 'GET',
                 credentials: 'include'
             })

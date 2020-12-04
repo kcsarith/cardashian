@@ -19,7 +19,7 @@ const Homepage = () => {
     }
     useEffect(() => {
         async function fetchUsers() {
-            const res = await fetchWithCSRF(`/api/users`, {
+            const res = await fetchWithCSRF(`/api/users/all`, {
                 method: 'GET',
                 credentials: 'include'
             })

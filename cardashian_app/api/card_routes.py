@@ -22,7 +22,6 @@ def crud_card_to_game(game_id):
     if request.method == 'GET':
         cards = Card.query.filter(Card.game_id == game_id)
         print('8'*100)
-        print(cards)
         return {'cards': [card.as_dict() for card in cards]}
     if request.method == 'POST':
         i = len(list(Card.query.filter(Card.game_id == game_id)))
@@ -214,7 +213,7 @@ def edit_delete_one_card(card_id):
         return {"card": card.as_dict()}
 
 
-@bp.route('/')
+@bp.route('/all')
 def get_all_cards():
     response = Card.query.all()
     print('8' * 100)
