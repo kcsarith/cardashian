@@ -1,6 +1,5 @@
 # Cardashian
 Here's an idea of what I want to create for my capstone.
-Capstone project.
 
 # Why would anyone need this?
 Keeping track of cards is one of the hardest parts about character card games, so I believe a databases creation app would make it easier to standardize card and prevent duplicate or similar descriptions.
