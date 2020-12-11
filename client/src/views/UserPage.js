@@ -235,23 +235,25 @@ const UserPage = () => {
                 </Row>
                 <ProfileComments user={profilePageState.user} />
             </Col>
-                <Col span={6} style={{ backgroundColor: 'black', display: 'flex', justifyContent: 'center', alignContent: 'center', alignItems: 'center', flexDirection: 'column', padding: '2em' }}>
+                <Col span={6} style={{ backgroundColor: 'black', display: 'flex', justifyContent: 'flex-start', alignContent: 'center', alignItems: 'center', flexDirection: 'column', padding: '2em' }}>
                     <Typography.Title style={{ color: 'white' }}>{profilePageState.friends.length} Followers</Typography.Title>
                     <Avatar.Group>
                         {profilePageState.friends.length > 0 &&
                             profilePageState.friends.map((ele, index) => <Avatar key={ele.id} src={ele.User.profile_pic_src} />)
                         }
                     </Avatar.Group>
-                    <Typography.Title style={{ color: 'white', margin: '3em' }}>More from user</Typography.Title>
+                    <Typography.Title style={{ color: 'white', margin: '1em' }}>More from user</Typography.Title>
                     <Row>
                         {
                             profilePageState.cards.length && profilePageState.cards.map((ele, index) =>
                                 <Col span={6}>
-                                    <Card
-                                        hoverable
-                                        cover={<img alt="example" width={64} height={128} src={ele.card_image_src ? ele.card_image_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />}
-                                    >
-                                    </Card>
+                                    <a target='_blank' href={`/${profilePageState.user.username}/${ele.game.name}/${ele.name}`}>
+                                        <Card
+                                            hoverable
+                                            cover={<img alt="example" width={64} height={128} src={ele.card_image_src ? ele.card_image_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />}
+                                        >
+                                        </Card>
+                                    </a>
                                 </Col>
                             )
                         }
@@ -261,7 +263,7 @@ const UserPage = () => {
                 :
                 <NotFound />
             }
-        </Row>
+        </Row >
     )
 }
 export default UserPage;

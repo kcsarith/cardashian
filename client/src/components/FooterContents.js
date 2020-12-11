@@ -9,45 +9,65 @@ export default function FooterContents() {
             columns={[
                 {
                     style: { width: '50%' },
-                    title: 'What is Lorem Ipsum?',
+                    title: 'About the Site',
                     items: [
                         {
-                            description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`
+                            title: 'Currently a work in progress',
+                            description: `Keeping track of cards is one of the hardest parts about character card games, so I believe a databases creation app would make it easier to standardize card and prevent duplicate or similar descriptions.
+
+This app can be useful to card enthusiasts of multiple levels. Hobbyists who are interested in creating their own game for fun can just make to their friends and family or someone who is serious about making one can private their database and pretend they never existed on this site.`
                         },
                     ],
                 },
                 {
-                    title: 'Products',
+                    title: 'Connect with Me',
                     items: [
                         {
-                            title: 'Where does it come from?',
+                            icon: (
+                                <img src="https://www.flaticon.com/svg/static/icons/svg/25/25231.svg" style={{ filter: 'invert(1)' }} />
+                            ),
+                            title: 'Github',
+                            url: 'https://github.com/kcsarith',
+                            openExternal: true,
                         },
                         {
-                            title: 'Contrary to popular belief',
+                            icon: (
+                                <img src="https://image.flaticon.com/icons/png/512/61/61109.png" style={{ filter: 'invert(1)' }} />
+                            ),
+                            title: 'Linked In',
+                            url: 'https://www.linkedin.com/in/krisna-sarith-11788b1b9',
+                            openExternal: true,
                         },
                         {
-                            title: 'Lorem Ipsum is not simply random text',
-                            description: 'It has roots',
+                            icon: (
+                                <img src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/angellist-512.png" style={{ filter: 'invert(1)' }} />
+                            ),
+                            title: 'Angellist',
+                            url: 'https://angel.co/u/krisna-charlie-sarith',
+                            openExternal: true,
+                        },
+                        {
+                            icon: (
+                                <img src="https://cdn.onlinewebfonts.com/svg/img_379085.png" style={{ filter: 'invert(1)' }} />
+                            ),
+                            title: 'Personal Site',
+                            url: 'https://kcsarith.github.io',
+                            openExternal: true,
                         },
                     ],
                 },
                 {
-                    title: 'Services',
+                    title: 'Useful Links',
                     items: [
                         {
-                            title: 'Why do we use it?',
-                        },
-                        {
-                            title: 'It is a long established',
-                        },
-                        {
-                            title: 'Lorem Ipsum',
-                            description: 'The point of using',
+                            title: 'Source code',
+                            url: 'https://github.com/kcsarith/cardashian',
                         },
                     ],
                 },
+
             ]}
-            bottom="Made with ❤️ by caRdashIaN koMpAnY ltd."
+            bottom="Created with JavaScript, Python, PostgreSQL and Ant Design. Deployed with Heroku and Docker Conainers."
         />
     );
 }

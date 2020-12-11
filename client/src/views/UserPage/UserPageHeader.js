@@ -12,7 +12,7 @@ const UserPageHeader = ({ user, title, game }) => {
             className="site-page-header"
             // subTitle={user ? `created by ${user.username}` : "This is a subtitle"}
             tags={<Tag color="grey">Offline</Tag>}
-            extra={<Button>Message Me</Button>}
+            extra={<Button onClick={() => { alert('Not working yet') }}>Message Me</Button>}
         >
             <Typography.Title style={{ color: 'white', textAlign: 'left' }}>{user ? user.about_me :
                 'Lorem Ipsum'}

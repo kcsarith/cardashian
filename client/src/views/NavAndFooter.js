@@ -25,10 +25,10 @@ const NavAndFooter = (props) => {
                 history.push('/');
                 break;
             case 'games':
-                history.push('/games');
+                history.push('/test-card');
                 break;
             case 'cards':
-                history.push('/cards');
+                history.push('/card-edit/visuals');
                 break;
             case 'about':
                 history.push('/about');
@@ -44,11 +44,11 @@ const NavAndFooter = (props) => {
                     Profile
       </a>
             </Menu.Item>
-            <Menu.Item>
+            {/* <Menu.Item>
                 <a rel="noopener noreferrer" href="/settings">
                     Settings
       </a>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item>
                 <a onClick={logout} href="/">
                     Logout
@@ -65,9 +65,9 @@ const NavAndFooter = (props) => {
                     <a><Title style={{ color: 'white' }} level={3} onClick={handleMenuClick}>CARDASHIAN</Title></a>
                     <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[navigationLocation.pathname.split('/')[1]]} onClick={handleMenuClick}>
                         <Menu.Item key="home">Home</Menu.Item>
-                        <Menu.Item key="games">Card Create</Menu.Item>
-                        <Menu.Item key="cards">Play Game</Menu.Item>
-                        <Menu.Item key="about">About</Menu.Item>
+                        <Menu.Item key="cards">Card Create(WIP)</Menu.Item>
+                        <Menu.Item key="games">Play Game(WIP)</Menu.Item>
+                        {/* <Menu.Item key="about">About</Menu.Item> */}
                     </Menu>
                     {userInfo.username ? <><p style={{ color: 'white' }}>Hello {userInfo.username}</p>
                         {userInfo.profile_pic_src ?
@@ -84,8 +84,8 @@ const NavAndFooter = (props) => {
                         :
                         <div>
 
-                            <Button primary onClick={() => history.push('/card-edit/visuals')}>EDIT CARD</Button>
-                            <Button primary onClick={() => history.push('/test-card')}>TEST CARD GAME</Button>
+                            {/* <Button primary onClick={() => history.push('/card-edit/visuals')}>EDIT CARD</Button>
+                            <Button primary onClick={() => history.push('/test-card')}>TEST CARD GAME</Button> */}
                             <Button primary onClick={() => history.push('/signup')}>Signup</Button>
                             <Button primary onClick={() => login('demo', 'password')}>Demo User</Button>
                             <LoginModal buttonText='Login' />

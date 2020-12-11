@@ -76,6 +76,7 @@ const Signup = () => {
     }
 
     function beforeUploadProfile(file) {
+        alert('The upload image does not work fully yet')
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
             message.error('You can only upload JPG/PNG file!');
@@ -94,6 +95,8 @@ const Signup = () => {
     );
 
     function beforeUploadBackground(file) {
+
+        alert('The upload image does not work fully yet')
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
             message.error('You can only upload JPG/PNG file!');
@@ -294,9 +297,10 @@ const Signup = () => {
                                         name="file"
                                         listType="picture-card"
                                         className="avatar-uploader"
-                                        showUploadList={false}
-                                        action={`/api/aws/users/${formInputState.username}/profiles`, {
-                                            method: 'GET',
+                                        // showUploadList={false}
+                                        action={`/api/aws/users/${formInputState.username}/profiles`}
+                                        headers={{
+                                            method: 'POST',
                                             credentials: 'include'
                                         }}
                                         beforeUpload={beforeUploadProfile}

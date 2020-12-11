@@ -21,6 +21,7 @@ app.register_blueprint(card_routes.bp, url_prefix='/api/cards')
 app.register_blueprint(game_routes.bp, url_prefix='/api/games')
 app.register_blueprint(category_routes.bp, url_prefix='/api/categories')
 app.register_blueprint(card_comment_routes.bp, url_prefix='/api/card-comments')
+app.register_blueprint( aws_routes.bp, url_prefix='/api/aws')
 app.register_blueprint(friend_routes.bp, url_prefix='/api/friends')
 app.register_blueprint(profile_comment_routes.bp, url_prefix='/api/profile-comments')
 

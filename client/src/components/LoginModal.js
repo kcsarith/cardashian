@@ -35,6 +35,7 @@ const LoginModal = (props) => {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                footer={null}
             >
                 <LoginModalContent handleOk={handleOk} />
             </Modal>

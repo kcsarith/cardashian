@@ -41,23 +41,20 @@ const Homepage = () => {
                 {
                     usersListState.users && usersListState.users.map((ele, index) => {
                         return (
-                            <Col span={5} style={{ padding: '1em', overflow: 'hidden' }} key={ele.id}>
+                            <Col span={4} style={{ padding: '1em', overflow: 'hidden', position: 'relative' }} key={ele.id}>
                                 <a href={`${ele.username}`}>
-                                    <Card
-                                        cover={<img alt="example" height={256} src={ele.profile_pic_src ? ele.profile_pic_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />}
-                                    >
-                                        <Card.Meta title={ele.username} />
-                                    </Card>
+                                    <img alt="example" height={256} width={256} style={{ borderRadius: '50%' }} src={ele.profile_pic_src ? ele.profile_pic_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />
+                                    <div style={{ backgroundColor: 'white', position: 'absolute', borderRadius: '3px', bottom: 40, padding: 5, margin: 0 }}><h1>{ele.username}</h1></div>
                                 </a>
                             </Col>
                         )
                     })
                 }
             </Row>
-            <div style={{ backgroundImage: `url(https://thumbs.gfycat.com/ComplexNiceBadger-max-1mb.gif)`, backgroundSize: 'contain' }}>
+            {/* <div style={{ backgroundImage: `url(https://thumbs.gfycat.com/ComplexNiceBadger-max-1mb.gif)`, backgroundSize: 'contain' }}>
                 <Typography.Title style={{ textAlign: 'center', color: 'white', padding: '1em' }} level={1}>Featured Games</Typography.Title>
             </div>
-            {/* <Row style={{ justifyContent: 'center', alignItems: 'center', marginTop: '3em' }}>
+            <Row style={{ justifyContent: 'center', alignItems: 'center', marginTop: '3em' }}>
                 <Col span={8} >
                     <ImageGallery originalClass={{ objectFit: 'cover', height: '640px', width: '240px' }}
                         items={gameImages} thumbnailPosition='right' showBullets autoPlay slideDuration={100} slideInterval={1000000} onSlide={handleSlide} />
@@ -101,21 +98,21 @@ const Homepage = () => {
                                 break;
 
                         }
-                        return (
-                            <Col span={5} style={{ padding: '1em', overflow: 'hidden' }}>
-                                <a href={`${eleUsername}/${ele.name}`}>
-                                    <Card
-                                        cover={<img alt="example" height={256} src={ele.home_bg_src ? ele.home_bg_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />}
-                                    >
-                                        <Card.Meta title={ele.name} description={`created by ${ele.name}`} />
-                                    </Card>
-                                </a>
-                            </Col>
-                        )
+                        // return (
+                        //     <Col span={5} style={{ padding: '1em', overflow: 'hidden' }}>
+                        //         <a href={`${eleUsername}/${ele.name}`}>
+                        //             <Card
+                        //                 cover={<img alt="example" height={256} src={ele.home_bg_src ? ele.home_bg_src : "https://cardashian-storage-dev.s3-us-west-1.amazonaws.com/generic_card.jpg"} />}
+                        //             >
+                        //                 <Card.Meta title={ele.name} description={`created by ${ele.name}`} />
+                        //             </Card>
+                        //         </a>
+                        //     </Col>
+                        // )
                     })
                 }
             </Row>
-            <div style={{ backgroundColor: 'white', flex: 'center' }}>
+            {/* <div style={{ backgroundColor: 'white', flex: 'center' }}>
                 <Typography.Title style={{ textAlign: 'center', padding: '1em' }} level={1}>Featured Cards</Typography.Title>
             </div>
             <Row style={{ justifyContent: 'center', alignItems: 'center', marginTop: '3em', marginLeft: '10em', marginRight: '10em' }}>
@@ -128,7 +125,7 @@ const Homepage = () => {
                             <Card.Meta title={ele.name} description="www.instagram.com" />
                         </Card></Col>)
                 }
-            </Row>
+            </Row> */}
 
             {/* <Row style={{ color: 'white', display: 'flex', justifyContent: 'center', textAlign: 'center', alignItems: 'center', marginTop: '3em', background: '#364d79' }} >
                 <Col span={24} >
